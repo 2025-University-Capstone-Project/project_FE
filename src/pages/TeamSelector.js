@@ -30,11 +30,15 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
+  background: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 20px;
   text-align: center;
   width: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 `;
 
 const TeamGrid = styled.div`
@@ -53,13 +57,20 @@ const TeamLogo = styled.img`
 `;
 
 const ConfirmButton = styled.button`
-  padding: 10px 20px;
+  padding: 12px 30px;
   font-weight: bold;
-  background-color: #333;
+  font-size: 1rem;
+  background-color: ${({ theme }) => theme.primaryColor || "#333"};
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  margin-top: 20px;
+  transition: opacity 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 const TeamSelector = ({ visible, onClose, onSelect }) => {
