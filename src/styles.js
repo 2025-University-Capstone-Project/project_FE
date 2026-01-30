@@ -3,10 +3,10 @@ import styled from "styled-components";
 // 전체 컨테이너
 export const Container = styled.div`
   font-family: 'Inter', Arial, sans-serif;
-  background-color: #121212;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #333333;
   min-height: 100vh;
-  padding: 0; /* Remove default padding for full-width hero */
+  padding: 0;
 `;
 
 // 헤더 스타일
@@ -15,13 +15,14 @@ export const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
   box-sizing: border-box;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 `;
 
 // 사이트 이름 (파란색, 좌측 상단)
@@ -65,7 +66,7 @@ export const NavItem = styled.a`
   margin: 0 25px;
   text-decoration: none;
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #555;
   font-weight: 600;
   text-transform: uppercase;
   transition: color 0.3s;

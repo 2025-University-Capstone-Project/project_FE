@@ -7,8 +7,8 @@ const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #121212;
-  color: white;
+  background-color: #ffffff;
+  color: #333333;
 `;
 
 const HeroSection = styled.section`
@@ -74,21 +74,22 @@ const FeaturesGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
   padding: 50px 10%;
-  background-color: #0a0a0a;
+  background-color: #f9f9f9;
 `;
 
 const FeatureCard = styled(Link)`
-  background: #1a1a1a;
+  background: #ffffff;
   padding: 40px;
   border-radius: 20px;
   text-decoration: none;
-  color: white;
+  color: #333;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid #333;
+  border: 1px solid #eee;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     border-color: ${({ theme }) => theme.primaryColor};
   }
 
@@ -98,7 +99,7 @@ const FeatureCard = styled(Link)`
   }
 
   p {
-    color: #888;
+    color: #666;
     font-size: 1.1rem;
   }
 `;
