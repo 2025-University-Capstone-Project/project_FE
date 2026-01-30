@@ -66,19 +66,24 @@ const Login = () => {
       />
 
       {/* 입력 폼 */}
-      <Input
-        name="id"
-        type="text"
-        placeholder="아이디"
-        onChange={handleChange}
-      />
-      <Input
-        name="password"
-        type="password"
-        placeholder="비밀번호"
-        onChange={handleChange}
-      />
-      <LoginButton onClick={handleLogin}>로그인</LoginButton>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        handleLogin();
+      }}>
+        <Input
+          name="id"
+          type="text"
+          placeholder="아이디"
+          onChange={handleChange}
+        />
+        <Input
+          name="password"
+          type="password"
+          placeholder="비밀번호"
+          onChange={handleChange}
+        />
+        <LoginButton type="submit">로그인</LoginButton>
+      </form>
 
       <SignupText onClick={() => navigate("/signup")}>회원가입</SignupText>
     </LoginContainer>

@@ -23,7 +23,7 @@ const ModalOverlay = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  display: ${({ visible }) => (visible ? "flex" : "none")};
+  display: ${({ $visible }) => ($visible ? "flex" : "none")};
   justify-content: center;
   align-items: center;
   z-index: 1000;
@@ -75,7 +75,7 @@ const TeamSelector = ({ visible, onClose, onSelect }) => {
   };
 
   return (
-    <ModalOverlay visible={visible}>
+    <ModalOverlay $visible={visible}>
       <ModalContent>
         <h2>응원팀 선택</h2>
         <p>응원 팀을 선택하세요</p>
