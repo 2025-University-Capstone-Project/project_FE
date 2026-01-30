@@ -7,6 +7,7 @@ const teamThemes = {
     lotte: {
         primaryColor: "#002955", // Navy
         secondaryColor: "#DC0226", // Red accent
+        gradient: "linear-gradient(135deg, #041E42 20%, #1c3d6e 100%)", // Rich Navy Gradient
         textColor: "#FFFFFF"
     },
     doosan: {
@@ -27,6 +28,7 @@ const teamThemes = {
     kt: {
         primaryColor: "#000000", // Black
         secondaryColor: "#EC1C24", // Red accent
+        gradient: "linear-gradient(135deg, #000000 20%, #2c2c2c 100%)", // Premium Dark Gradient
         textColor: "#FFFFFF"
     },
     hanwha: {
