@@ -25,6 +25,7 @@ const Home = () => {
   const handleTeamSelect = (team) => {
     setMyTeam(team);
     localStorage.setItem("myTeam", JSON.stringify(team));
+    window.location.reload(); // 테마 적용을 위해 페이지 새로고침 (간단한 구현)
   };
 
   return (

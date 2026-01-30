@@ -22,13 +22,13 @@ export const Header = styled.header`
 export const SiteName = styled.h1`
   font-size: 32px;
   font-weight: bold;
-  color: #007bff;
+  color: ${({ theme }) => theme.primaryColor || "#007bff"};
   margin: 0;
 `;
 
 // 로그인 버튼 (초록색, 우측 상단)
 export const LoginButton = styled.button`
-  background-color: #28a745;
+  background-color: ${({ theme }) => theme.secondaryColor || "#28a745"};
   color: white;
   font-size: 16px;
   padding: 8px 16px;
@@ -38,7 +38,7 @@ export const LoginButton = styled.button`
   transition: 0.3s;
 
   &:hover {
-    background-color: #218838;
+    background-color: ${({ theme }) => theme.primaryColor || "#218838"};
   }
 `;
 
@@ -61,7 +61,7 @@ export const NavItem = styled.a`
   font-weight: bold;
 
   &:hover {
-    color: #007bff;
+    color: ${({ theme }) => theme.primaryColor || "#007bff"};
   }
 `;
 
@@ -187,14 +187,14 @@ export const LoginTitle = styled.h2`
 export const LoginButton2 = styled(Button)`
   width: 250px;
   padding: 10px;
-  background-color: blue;
+  background-color: ${({ theme }) => theme.primaryColor || "blue"};
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 
   &:hover {
-    background-color: darkblue;
+    background-color: ${({ theme }) => theme.secondaryColor || "darkblue"};
   }
 `;
 
