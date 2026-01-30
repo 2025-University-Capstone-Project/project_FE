@@ -1,47 +1,59 @@
 const teamThemes = {
     kia: {
-        primaryColor: "#c60c30", // Red (KIA Tigers)
-        secondaryColor: "#000000",
+        primaryColor: "#E30113", // Red/Bright Red
+        secondaryColor: "#05141F", // Navy Black
+        textColor: "#FFFFFF"
     },
     lotte: {
-        primaryColor: "#041E42", // Navy (Lotte Giants)
-        secondaryColor: "#D00F31", // Red
+        primaryColor: "#002955", // Navy
+        secondaryColor: "#DC0226", // Red accent
+        textColor: "#FFFFFF"
     },
     doosan: {
-        primaryColor: "#131230", // Navy (Doosan Bears)
-        secondaryColor: "#C60C30", // Red
+        primaryColor: "#131230", // Navy/Black
+        secondaryColor: "#FFFFFF",
+        textColor: "#FFFFFF"
     },
     ssg: {
-        primaryColor: "#CE0E2D", // Red (SSG Landers)
-        secondaryColor: "#FFC600",
+        primaryColor: "#CE0E2D", // Red
+        secondaryColor: "#FFFFFF",
+        textColor: "#FFFFFF"
     },
     samsung: {
-        primaryColor: "#074CA1", // Blue (Samsung Lions)
-        secondaryColor: "#C0C0C0",
+        primaryColor: "#074CA1", // Blue
+        secondaryColor: "#FFFFFF",
+        textColor: "#FFFFFF"
     },
     kt: {
-        primaryColor: "#000000", // Black (KT Wiz)
-        secondaryColor: "#EC1C24",
+        primaryColor: "#000000", // Black
+        secondaryColor: "#EC1C24", // Red accent
+        textColor: "#FFFFFF"
     },
     hanwha: {
-        primaryColor: "#F37321", // Orange (Hanwha Eagles)
+        primaryColor: "#F37321", // Orange
         secondaryColor: "#000000",
+        textColor: "#FFFFFF" // Orange/Black contrast might need white text on orange if dark enough, or black. F37321 is bright orange, white text is OK, but black might be safer. Let's stick to White for now as it's a hero background gradient.
     },
     lg: {
-        primaryColor: "#C30452", // Pink/Red (LG Twins)
+        primaryColor: "#C30452", // Magenta/Red
         secondaryColor: "#000000",
+        textColor: "#FFFFFF"
     },
     kiwoom: {
-        primaryColor: "#820024", // Burgundy (Kiwoom Heroes)
-        secondaryColor: "#C60C30",
+        primaryColor: "#820024", // Burgundy
+        secondaryColor: "#FFFFFF",
+        textColor: "#FFFFFF"
     },
     nc: {
-        primaryColor: "#315288", // Dark Blue (NC Dinos)
-        secondaryColor: "#AF917B", // Goldish
+        primaryColor: "#315288", // Navy
+        secondaryColor: "#AF917B", // Gold
+        textColor: "#FFFFFF"
     },
     default: {
-        primaryColor: "#007bff", // Default Blue
-        secondaryColor: "#28a745", // Default Green
+        primaryColor: "#FFFFFF", // White main
+        secondaryColor: "#FFD700", // Yellow accent
+        gradient: "linear-gradient(135deg, #FFFFFF 0%, #F0E68C 50%, #98FB98 100%)", // White -> Khaki (Yellowish) -> PaleGreen
+        textColor: "#333333" // Dark text for light background
     },
 };
 

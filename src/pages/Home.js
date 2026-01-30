@@ -17,11 +17,7 @@ const HeroSection = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.primaryColor || "#000"} 0%,
-    #000000 90%
-  );
+  background: ${({ theme }) => theme.gradient || `linear-gradient(135deg, ${theme.primaryColor || "#000"} 0%, ${theme.secondaryColor || "#000"} 90%)`};
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -34,37 +30,41 @@ const HeroTitle = styled.h1`
   margin: 0;
   letter-spacing: -2px;
   z-index: 2;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  text-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  color: ${({ theme }) => theme.textColor || "#fff"};
 
   span {
-    color: ${({ theme }) => theme.secondaryColor || "#fff"};
+    color: ${({ theme }) => theme.secondaryColor === "#FFFFFF" ? theme.primaryColor : theme.secondaryColor || "#fff"};
+    /* If secondary is white (same as text), use primary for contrast, otherwise secondary */
   }
 `;
 
 const HeroSubtitle = styled.p`
   font-size: 1.5rem;
   margin-top: 20px;
-  opacity: 0.8;
+  opacity: 0.9;
   z-index: 2;
   max-width: 600px;
+  color: ${({ theme }) => theme.textColor || "#fff"};
 `;
 
 const TeamBadge = styled.div`
   margin-top: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  background: ${({ theme }) => theme.textColor === "#333333" ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 0.1)"};
   backdrop-filter: blur(10px);
   padding: 15px 30px;
   border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid ${({ theme }) => theme.textColor === "#333333" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.2)"};
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 2;
   display: flex;
   align-items: center;
   gap: 10px;
+  color: ${({ theme }) => theme.textColor || "#fff"};
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: ${({ theme }) => theme.textColor === "#333333" ? "rgba(255, 255, 255, 0.8)" : "rgba(255, 255, 255, 0.2)"};
     transform: translateY(-2px);
   }
 `;
