@@ -30,7 +30,7 @@ export const SiteName = styled.h1`
   font-size: 28px;
   font-weight: 900;
   letter-spacing: -1px;
-  color: ${({ theme }) => theme.secondaryColor || "#fff"};
+  color: ${({ theme }) => theme.primaryColor || "#333"};
   margin: 0;
   text-transform: uppercase;
   cursor: pointer;
@@ -38,7 +38,7 @@ export const SiteName = styled.h1`
 
 // 로그인 버튼 (초록색, 우측 상단)
 export const LoginButton = styled.button`
-  background-color: ${({ theme }) => theme.secondaryColor || "#28a745"};
+  background-color: ${({ theme }) => theme.primaryColor || "#28a745"};
   color: white;
   font-size: 16px;
   padding: 8px 16px;
@@ -46,9 +46,11 @@ export const LoginButton = styled.button`
   cursor: pointer;
   border-radius: 5px;
   transition: 0.3s;
+  font-weight: bold;
 
   &:hover {
-    background-color: ${({ theme }) => theme.primaryColor || "#218838"};
+    opacity: 0.9;
+    transform: scale(1.05);
   }
 `;
 
