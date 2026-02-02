@@ -571,7 +571,9 @@ const ExcitingZone = () => {
                 </HeroDesc>
                 <PlayPill>▶ Play</PlayPill>
               </HeroContent>
-              <DecorBlock>🏆</DecorBlock>
+              <DecorBlock>
+                <img src="/assets/quiz_bulb.png" alt="Quiz" style={{ width: '130px', filter: 'drop-shadow(0 5px 15px rgba(0,0,0,0.2))' }} />
+              </DecorBlock>
             </HeroCard>
 
             {/* Match Prediction - Moved Here */}
@@ -587,7 +589,7 @@ const ExcitingZone = () => {
                 </HeroDesc>
                 <PlayPill>예측하기</PlayPill>
               </HeroContent>
-              <DecorBlock style={{ fontSize: '7rem', right: '30px' }}>🔮</DecorBlock>
+              <DecorBlock style={{ fontSize: '8.5rem', right: '25px' }}>🏆</DecorBlock>
             </HeroCard>
           </HeroRow>
 
