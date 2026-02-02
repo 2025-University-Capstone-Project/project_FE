@@ -16,7 +16,8 @@ const Container = styled.div`
 
 const LeftPanel = styled.div`
   flex: 1;
-  background: white;
+  background: ${({ theme }) => theme.textColor === "#FFFFFF" ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.9)"};
+  backdrop-filter: blur(10px);
   padding: 20px;
   display: flex;
   justify-content: center;
@@ -24,17 +25,20 @@ const LeftPanel = styled.div`
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   margin-right: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
 `;
 
 const RightPanel = styled.div`
   flex: 1;
-  background: white;
+  background: ${({ theme }) => theme.textColor === "#FFFFFF" ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.9)"};
+  backdrop-filter: blur(10px);
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
 `;
 
 const Input = styled.input`

@@ -10,7 +10,7 @@ const DiaryContainer = styled.div`
 const PageTitle = styled.h2`
   text-align: center;
   font-size: 2rem;
-  color: ${({ theme }) => theme.primaryColor || "#333"};
+  color: ${({ theme }) => theme.textColor || "#333"};
   margin-bottom: 30px;
   font-weight: 800;
 `;

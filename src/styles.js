@@ -3,10 +3,11 @@ import styled from "styled-components";
 // 전체 컨테이너
 export const Container = styled.div`
   font-family: 'Inter', Arial, sans-serif;
-  background-color: #ffffff;
-  color: #333333;
+  background: ${({ theme }) => theme.gradient || theme.primaryColor || "#ffffff"};
+  color: ${({ theme }) => theme.textColor || "#333333"};
   min-height: 100vh;
   padding: 0;
+  transition: background 0.5s ease;
 `;
 
 // 헤더 스타일
@@ -34,6 +35,7 @@ export const SiteName = styled.h1`
   margin: 0;
   text-transform: uppercase;
   cursor: pointer;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.1);
 `;
 
 // 로그인 버튼 (초록색, 우측 상단)
@@ -68,13 +70,13 @@ export const NavItem = styled.a`
   margin: 0 25px;
   text-decoration: none;
   font-size: 16px;
-  color: #555;
+  color: ${({ theme }) => theme.textColor === "#FFFFFF" ? "rgba(255, 255, 255, 0.7)" : "#555"};
   font-weight: 600;
   text-transform: uppercase;
   transition: color 0.3s;
 
   &:hover {
-    color: ${({ theme }) => theme.primaryColor || "#007bff"};
+    color: ${({ theme }) => theme.textColor === "#FFFFFF" ? "#FFFFFF" : (theme.primaryColor || "#007bff")};
   }
 `;
 

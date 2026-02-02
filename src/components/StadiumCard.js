@@ -3,12 +3,20 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Card = styled.div`
-  width: 220px;
+  width: 250px;
   background-color: white;
-  padding: 10px;
-  margin: 10px;
+  padding: 15px;
+  margin: 15px;
   cursor: pointer;
   text-align: center;
+  color: #333; /* Force dark text on white background */
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const Image = styled.img`
@@ -27,8 +35,8 @@ const StadiumCard = ({ stadium }) => {
   return (
     <Card onClick={handleClick}>
       <Image src={stadium.image} alt={stadium.name} />
-      <div>{stadium.name}</div>
-      <div>{stadium.team}</div>
+      <h3 style={{ margin: "10px 0 5px", fontSize: "1.2rem" }}>{stadium.name}</h3>
+      <p style={{ margin: "0", color: "#666", fontSize: "0.9rem" }}>{stadium.team}</p>
     </Card>
   );
 };
