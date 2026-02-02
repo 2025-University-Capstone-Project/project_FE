@@ -440,6 +440,22 @@ const ExcitingZone = () => {
     setGameOver(false);
   };
 
+  // Save score when game ends
+  React.useEffect(() => {
+    if (gameOver) {
+      const userStr = localStorage.getItem("loggedInUser");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        // Only add the score from THIS game session.
+        // 'score' state holds the total correctness.
+        const updatedUser = { ...user, points: (user.points || 0) + score };
+        localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+        // Force header/profile update if needed (though Profile reads on mount/render)
+        window.dispatchEvent(new Event("auth-change")); // Event name reuse for general user data update
+      }
+    }
+  }, [gameOver]);
+
   const handleAnswer = (answerValue) => {
     // 1. Determine Answer (Input text or Button click)
     const submittedAnswer = answerValue || input.trim();
@@ -460,7 +476,7 @@ const ExcitingZone = () => {
 
     // 4. Update Score
     if (isCorrect) {
-      setScore(prev => prev + 10); // 10 points per question (Total 100)
+      setScore(prev => prev + 10);
     }
 
     // 5. Next Question or End
