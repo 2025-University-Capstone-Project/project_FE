@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TeamSelector from "./TeamSelector";
 
 const HomeContainer = styled.div`
@@ -77,7 +77,7 @@ const FeaturesGrid = styled.div`
   background-color: #f9f9f9;
 `;
 
-const FeatureCard = styled(Link)`
+const FeatureCard = styled.div`
   background: #ffffff;
   padding: 40px;
   border-radius: 20px;
@@ -86,6 +86,7 @@ const FeatureCard = styled(Link)`
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid #eee;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-10px);
@@ -104,7 +105,7 @@ const FeatureCard = styled(Link)`
   }
 `;
 
-const PredictionBanner = styled(Link)`
+const PredictionBanner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -119,6 +120,7 @@ const PredictionBanner = styled(Link)`
   transition: transform 0.3s;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
@@ -134,38 +136,12 @@ const PredictionBanner = styled(Link)`
   }
 `;
 
-const BannerContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 2;
-`;
-
-const BannerTitle = styled.h2`
-  font-size: 2rem;
-  font-weight: 800;
-  margin: 0;
-`;
-
-const BannerText = styled.p`
-  font-size: 1.1rem;
-  opacity: 0.9;
-  margin: 0;
-`;
-
-const BannerButton = styled.div`
-  background: white;
-  color: #6b48ff;
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-weight: bold;
-  font-size: 1.1rem;
-  z-index: 2;
-`;
+// ... (other styled components remain same if not touched)
 
 const Home = () => {
   const [isSelectorVisible, setSelectorVisible] = useState(false);
   const [myTeam, setMyTeam] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedTeam = localStorage.getItem("myTeam");
@@ -178,6 +154,16 @@ const Home = () => {
     setMyTeam(team);
     localStorage.setItem("myTeam", JSON.stringify(team));
     window.location.reload();
+  };
+
+  const handleNavigation = (path) => {
+    const isLoggedIn = !!localStorage.getItem("loggedInUser");
+    if (!isLoggedIn) {
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+    } else {
+      navigate(path);
+    }
   };
 
   return (
@@ -204,7 +190,7 @@ const Home = () => {
         </TeamBadge>
       </HeroSection>
 
-      <PredictionBanner to="/prediction">
+      <PredictionBanner onClick={() => handleNavigation('/prediction')}>
         <BannerContent>
           <BannerTitle>🏆 오늘의 승부 예측</BannerTitle>
           <BannerText>오늘 경기의 승패를 예측하고 포인트를 획득하세요!</BannerText>
@@ -213,15 +199,15 @@ const Home = () => {
       </PredictionBanner>
 
       <FeaturesGrid>
-        <FeatureCard to="/diary">
+        <FeatureCard onClick={() => handleNavigation('/diary')}>
           <h3>📅 직관 일지</h3>
           <p>나만의 직관 기록을 남기고 승률을 분석하세요.</p>
         </FeatureCard>
-        <FeatureCard to="/excitingzone">
+        <FeatureCard onClick={() => handleNavigation('/excitingzone')}>
           <h3>⚡️ 익사이팅존</h3>
           <p>야구 퀴즈를 풀고 포인트를 획득하세요.</p>
         </FeatureCard>
-        <FeatureCard to="/guidezone">
+        <FeatureCard onClick={() => handleNavigation('/guidezone')}>
           <h3>🏟️ 직관 가이드</h3>
           <p>전국 야구장 좌석 정보와 꿀팁을 확인하세요.</p>
         </FeatureCard>
