@@ -7,9 +7,9 @@ import { getHolidayName } from "../utils/holidays";
 
 const CalendarWrapper = styled.div`
   display: flex;
-  width: 90%;
-  max-width: 1200px;
-  height: 700px;
+  width: 98%; /* Almost full width */
+  max-width: 1800px; /* Very wide max-width */
+  min-height: 500px; /* Reduced min-height */
   margin: 0 auto;
   background: white;
   border-radius: 30px;
@@ -25,10 +25,11 @@ const CalendarWrapper = styled.div`
 
 // ... Styled Components (Sidebar updated)
 const Sidebar = styled.div`
-  width: 30%;
+  width: 280px; /* Reduced width to give grid more space */
+  flex-shrink: 0; /* Don't shrink */
   background: ${({ theme }) => theme.primaryColor || "#6b48ff"};
   color: white;
-  padding: 40px;
+  padding: 30px; /* Reduced padding */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -41,7 +42,7 @@ const HeaderNav = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem; /* Smaller font */
   font-weight: bold;
   
   span {
@@ -66,8 +67,8 @@ const MonthList = styled.div`
 `;
 
 const MonthItem = styled.div`
-  font-size: 1.2rem;
-  padding: 10px 20px;
+  font-size: 1rem; /* Smaller font */
+  padding: 8px 15px;
   cursor: pointer;
   border-radius: 50px;
   transition: all 0.3s;
@@ -98,16 +99,16 @@ const ListLinkBtn = styled.button`
 
 const MainContent = styled.div`
   flex: 1;
-  padding: 50px;
+  padding: 40px; /* Spacious padding */
   background: white;
   display: flex;
   flex-direction: column;
-  color: #333; /* Force dark text since background is white */
+  color: #333;
 `;
 
 const CurrentMonthTitle = styled.h2`
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2.5rem; /* Large title */
   color: #333;
   margin-bottom: 40px;
   letter-spacing: 5px;
@@ -118,14 +119,14 @@ const CurrentMonthTitle = styled.h2`
 const DaysGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 15px;
+  gap: 20px; /* Grid gap */
   text-align: center;
 `;
 
 const DayLabel = styled.div`
   font-weight: bold;
   color: #999;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const HolidayText = styled.span`
@@ -143,15 +144,17 @@ const months = [
 // ...
 
 const DayCell = styled.div`
-  height: 60px;
-  width: 60px;
-  margin: 0 auto;
+  width: 85%; /* Don't fill the grid cell */
+  max-width: 120px; /* Cap the size */
+  aspect-ratio: 1 / 1;
+  margin: 0 auto; /* Center in grid cell */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  font-size: 1.1rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 8px;
+  border-radius: 12px;
+  font-size: 1rem;
   font-weight: ${({ $isToday }) => $isToday ? "bold" : "normal"};
   cursor: ${({ $isPlaceholder }) => $isPlaceholder ? "default" : "pointer"};
   position: relative;
@@ -161,14 +164,14 @@ const DayCell = styled.div`
   background: ${({ $hasEntry, theme, $bgImage }) => {
     if ($bgImage) return `url("${$bgImage}") center/cover no-repeat`; // Added quotes
     if ($hasEntry) return (theme.secondaryColor || "#FFC600");
-    return "transparent";
+    return "#f9f9f9"; /* Default background for empty days */
   }};
   
   /* Text Color Logic */
   color: ${({ $hasEntry, $isHoliday, $isPlaceholder, $bgImage }) => {
     if ($bgImage) return "white"; // White text on image
     if ($hasEntry) return "white";
-    if ($isPlaceholder) return "#eee";
+    if ($isPlaceholder) return "transparent";
     if ($isHoliday) return "#E30113";
     return "#333";
   }};
@@ -178,10 +181,14 @@ const DayCell = styled.div`
 
   /* Today Marker */
   border: ${({ $isToday, theme }) => $isToday ? `2px solid ${theme.primaryColor || "#333"}` : "2px solid transparent"};
+  
+  /* Hide placeholders visually but keep layout */
+  opacity: ${({ $isPlaceholder }) => $isPlaceholder ? "0" : "1"};
+  pointer-events: ${({ $isPlaceholder }) => $isPlaceholder ? "none" : "auto"};
 
   &:hover {
-    opacity: 0.8; 
-    transform: ${({ $isPlaceholder }) => $isPlaceholder ? "none" : "scale(1.1)"};
+    opacity: 0.7;
+    border: ${({ $isPlaceholder, theme }) => $isPlaceholder ? "none" : `2px solid ${theme.primaryColor || "#333"}`};
   }
 `;
 
