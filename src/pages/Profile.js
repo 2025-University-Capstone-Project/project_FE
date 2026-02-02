@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import teamThemes from '../theme/teams';
 
@@ -103,6 +104,8 @@ const Profile = () => {
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const userStr = localStorage.getItem('loggedInUser');
     if (userStr) setUser(JSON.parse(userStr));
@@ -111,7 +114,23 @@ const Profile = () => {
     if (teamStr) setMyTeam(JSON.parse(teamStr));
   }, []);
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <Container>
+        <LoginRequestContainer>
+          <div className="icon">⚾️</div>
+          <h2>로그인이 필요한 서비스입니다.</h2>
+          <p>
+            나만의 직관 일지를 기록하고<br />
+            응원하는 팀의 승리를 함께하세요!
+          </p>
+          <LoginRequestButton onClick={() => navigate('/login')}>
+            로그인 하러 가기
+          </LoginRequestButton>
+        </LoginRequestContainer>
+      </Container>
+    );
+  }
 
   const userTeamTheme = myTeam && teamThemes[myTeam.id] ? teamThemes[myTeam.id] : teamThemes.default;
   const dashboardSchedule = fullSchedule.slice(0, 3);
@@ -744,6 +763,68 @@ const ScheduleTable = styled.table`
 
 const HistoryTable = styled(ScheduleTable)`
   td { text-align: center; }
+`;
+
+// Login Request UI Styles
+const LoginRequestContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  text-align: center;
+  margin-top: 50px;
+  min-height: 400px;
+  
+  .icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+`;
+
+const LoginRequestButton = styled.button`
+  background: linear-gradient(90deg, #6b48ff 0%, #8e24aa 100%);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(107, 72, 255, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(107, 72, 255, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
 `;
 
 export default Profile;
