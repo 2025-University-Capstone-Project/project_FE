@@ -147,7 +147,7 @@ const Layout = () => {
       <Header>
         <LogoContainer onClick={() => navigate("/")}>
           <IconWrapper>
-            <Baseball />
+            ⚾️
           </IconWrapper>
           <SiteTitle>Y.P.T</SiteTitle>
         </LogoContainer>
