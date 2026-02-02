@@ -16,19 +16,73 @@ const ReviewView = () => {
         id: 1,
         stadiumId: 'jamsil',
         stadiumName: '잠실야구장',
-        rating: 4.5,
-        text: '야구장 분위기가 정말 좋았어요! 특히 응원석 열기가 대단합니다.',
-        imageUrl: null,
-        date: '2024-03-23'
+        rating: 5.0,
+        text: '오늘 경기 분위기 미쳤습니다! 끝내기 승리 짜릿해요 ㅠㅠ',
+        imageUrl: '/assets/mock/photo_1.jpg',
+        date: '2026-01-10'
       },
       {
         id: 2,
         stadiumId: 'jamsil',
         stadiumName: '잠실야구장',
+        rating: 4.5,
+        text: '잠실 삼겹살 정식은 필수입니다. 야구 보면서 먹으니까 꿀맛!',
+        imageUrl: '/assets/mock/photo_2.jpg',
+        date: '2026-01-11'
+      },
+      {
+        id: 3,
+        stadiumId: 'changwon',
+        stadiumName: '창원NC파크',
         rating: 5.0,
-        text: '화장실도 깔끔하고 접근성도 좋아요! 경기장 뷰도 훌륭합니다.',
-        imageUrl: 'https://via.placeholder.com/300',
-        date: '2024-03-24'
+        text: '엔팍 시야는 진짜 국내 최고인 듯... 어디서 봐도 잘 보여요.',
+        imageUrl: '/assets/mock/photo_3.jpg',
+        date: '2026-01-12'
+      },
+      {
+        id: 4,
+        stadiumId: 'changwon',
+        stadiumName: '창원NC파크',
+        rating: 4.0,
+        text: '주차장이 좀 붐비긴 했지만 경기장은 최고였습니다.',
+        imageUrl: '/assets/mock/photo_4.jpg',
+        date: '2026-01-13'
+      },
+      {
+        id: 5,
+        stadiumId: 'jamsil',
+        stadiumName: '잠실야구장',
+        rating: 5.0,
+        text: '오랜만에 직관왔는데 이겨서 너무 좋아요! 선수들 퇴근길도 봤습니다.',
+        imageUrl: '/assets/mock/photo_5.jpg',
+        date: '2026-01-14'
+      },
+      {
+        id: 6,
+        stadiumId: 'changwon',
+        stadiumName: '창원NC파크',
+        rating: 5.0,
+        text: '공룡좌석 너무 귀여워요 ㅋㅋ 아이들이랑 오기 딱 좋습니다.',
+        imageUrl: '/assets/mock/photo_6.jpg',
+        date: '2026-01-15'
+      },
+      {
+        id: 7,
+        stadiumId: 'incheon',
+        stadiumName: '인천SSG랜더스필드',
+        rating: 4.5,
+        text: '스타벅스 딜리버리 편하고 좋아요. 불꽃놀이도 멋짐!',
+        imageUrl: '/assets/mock/photo_7.jpg',
+        date: '2026-01-16'
+      },
+      {
+        id: 8,
+        stadiumId: 'jamsil',
+        stadiumName: '잠실야구장',
+        rating: 5.0,
+        text: '잠실의 주인은 우리! 가을야구 가자~~',
+        imageUrl: '/assets/mock/photo_8.jpg',
+        date: '2026-01-17'
       },
     ];
 
@@ -137,9 +191,13 @@ const SubHeader = styled.p`
 `;
 
 const ReviewList = styled.div`
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
 `;
 
 const ReviewCard = styled.div`

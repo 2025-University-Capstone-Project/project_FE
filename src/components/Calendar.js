@@ -213,7 +213,7 @@ const Calendar = () => {
 
   const handleDateClick = (day) => {
     if (!day) return;
-    const dateKey = `${year}-${month}-${day}`;
+    const dateKey = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     navigate(`/diary/write/${dateKey}`);
   };
 
@@ -226,7 +226,7 @@ const Calendar = () => {
       days.push(<DayCell key={`empty-${i}`} $isPlaceholder />);
     }
     for (let day = 1; day <= daysInMonth; day++) {
-      const dateKey = `${year}-${month}-${day}`;
+      const dateKey = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       const currentDate = new Date(year, month - 1, day);
       const isSunday = currentDate.getDay() === 0;
       const isToday = today.getDate() === day && today.getMonth() + 1 === month && today.getFullYear() === year;

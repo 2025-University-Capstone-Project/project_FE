@@ -35,17 +35,26 @@ const realRanking = [
   { rank: 10, team: "키움", win: 47, lose: 93, draw: 4, rate: "0.336" },
 ];
 
-// Mock Data for Point History
+// Helper for dynamic dates
+const getDateStr = (diff = 0) => {
+  const d = new Date();
+  d.setDate(d.getDate() - diff);
+  return `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+};
+
+// Mock Data for Point History (Dynamic)
 const mockPointHistory = [
-  { date: "05/13", desc: "퀴즈 정답", points: "+10" },
-  { date: "05/13", desc: "퀴즈 정답", points: "+10" },
-  { date: "05/12", desc: "출석 체크", points: "+5" },
-  { date: "05/11", desc: "예측 성공", points: "+50" },
-  { date: "05/10", desc: "퀴즈 정답", points: "+10" },
-  { date: "05/09", desc: "출석 체크", points: "+5" },
-  { date: "05/08", desc: "직관 승리", points: "+100" },
-  { date: "05/07", desc: "퀴즈 정답", points: "+10" },
+  { date: getDateStr(0), desc: "출석 체크", points: "+5" },
+  { date: getDateStr(0), desc: "직관 승리 (vs LG)", points: "+100" },
+  { date: getDateStr(1), desc: "퀴즈 정답", points: "+10" },
+  { date: getDateStr(1), desc: "출석 체크", points: "+5" },
+  { date: getDateStr(2), desc: "승부 예측 적립", points: "+100" },
+  { date: getDateStr(2), desc: "출석 체크", points: "+5" },
+  { date: getDateStr(3), desc: "퀴즈 정답", points: "+10" },
+  { date: getDateStr(3), desc: "출석 체크", points: "+5" },
 ];
+
+const totalPointsMock = mockPointHistory.reduce((acc, cur) => acc + parseInt(cur.points), 0);
 
 // SVG Icons
 const Icons = {
@@ -192,7 +201,7 @@ const Profile = () => {
               <h3>{user.nickname || user.id} 님</h3>
               <p>오늘도 승리요정이 되어보세요!</p>
             </div>
-            <PointsTag>{user.points || 0} P</PointsTag>
+            <PointsTag>{totalPointsMock} P</PointsTag>
           </UserProfileCard>
 
           {/* 2. Schedule */}
@@ -227,8 +236,8 @@ const Profile = () => {
               </TitleGroup>
             </CardHeader>
             <AttendanceBox>
-              <div className="status">오늘 출석 완료!</div>
-              <p>연속 5일 출석 중 🔥</p>
+              <div className="status" style={{ color: '#333' }}>매일매일 출석체크</div>
+              <p>연속 4일 출석 중! 5일차 도전 🔥</p>
               <button>출석하기</button>
             </AttendanceBox>
           </DashboardCard>

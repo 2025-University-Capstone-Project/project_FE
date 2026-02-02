@@ -73,6 +73,24 @@ const ConfirmButton = styled.button`
   }
 `;
 
+const CancelButton = styled.button`
+  padding: 12px 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  background-color: #f0f0f0;
+  color: #555;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 12px;
+  transition: opacity 0.3s;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;
+
 const TeamSelector = ({ visible, onClose, onSelect }) => {
   const [selectedTeam, setSelectedTeam] = useState(null);
 
@@ -101,6 +119,7 @@ const TeamSelector = ({ visible, onClose, onSelect }) => {
             />
           ))}
         </TeamGrid>
+        <CancelButton onClick={onClose}>뒤로가기</CancelButton>
         <ConfirmButton onClick={handleConfirm}>확인</ConfirmButton>
       </ModalContent>
     </ModalOverlay>

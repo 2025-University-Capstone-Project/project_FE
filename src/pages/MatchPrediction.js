@@ -128,22 +128,22 @@ const PredictBtn = styled.button`
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 
   ${({ $type, $selected, theme }) => {
-        if ($type === 'win') {
-            return `
+    if ($type === 'win') {
+      return `
         color: ${$selected ? 'white' : '#4caf50'};
         border-color: #4caf50;
         background: ${$selected ? '#4caf50' : 'white'};
         &:hover { background: ${$selected ? '#4caf50' : '#e8f5e9'}; }
       `;
-        } else {
-            return `
+    } else {
+      return `
         color: ${$selected ? 'white' : '#f44336'};
         border-color: #f44336;
         background: ${$selected ? '#f44336' : 'white'};
         &:hover { background: ${$selected ? '#f44336' : '#ffebee'}; }
       `;
-        }
-    }}
+    }
+  }}
 `;
 
 const SubmitBtn = styled.button`
@@ -192,129 +192,131 @@ const BackLink = styled.button`
 
 // --- Mock Data ---
 const TODAY_MATCH = {
-    date: new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }),
-    opponent: { name: "두산 베어스", logo: "🐻" }, // Placeholder logo logic needed ideally
-    myTeamWrapper: null // Will be loaded from localstorage
+  date: new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }),
+  opponent: { name: "두산 베어스", logo: "/assets/teams/doosan.png" },
+  myTeamWrapper: null // Will be loaded from localstorage
 };
 
 const MatchPrediction = () => {
-    const navigate = useNavigate();
-    const [myTeam, setMyTeam] = useState(null);
-    const [selection, setSelection] = useState(null); // 'win' | 'lose'
-    const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
+  const [myTeam, setMyTeam] = useState(null);
+  const [selection, setSelection] = useState(null); // 'win' | 'lose'
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-    useEffect(() => {
-        // Load my team
-        const savedTeam = JSON.parse(localStorage.getItem("myTeam"));
-        if (savedTeam) {
-            setMyTeam(savedTeam);
-        }
-
-        // Load saved prediction for today
-        const todayStr = new Date().toDateString();
-        const savedPred = JSON.parse(localStorage.getItem("matchPrediction"));
-
-        if (savedPred && savedPred.date === todayStr) {
-            setSelection(savedPred.selection);
-            setIsSubmitted(true);
-        }
-    }, []);
-
-    const handleSubmit = () => {
-        if (!selection) return;
-
-        // Save
-        const prediction = {
-            date: new Date().toDateString(),
-            selection: selection,
-            timestamp: Date.now()
-        };
-        localStorage.setItem("matchPrediction", JSON.stringify(prediction));
-        setIsSubmitted(true);
-    };
-
-    if (!myTeam) {
-        return (
-            <Container>
-                <ContentWrapper>
-                    <h2>먼저 응원하는 팀을 선택해주세요!</h2>
-                    <SubmitBtn onClick={() => navigate('/')}>홈으로 이동</SubmitBtn>
-                </ContentWrapper>
-            </Container>
-        );
+  useEffect(() => {
+    // Load my team
+    const savedTeam = JSON.parse(localStorage.getItem("myTeam"));
+    if (savedTeam) {
+      setMyTeam(savedTeam);
     }
 
+    // Load saved prediction for today
+    // const todayStr = new Date().toDateString();
+    // const savedPred = JSON.parse(localStorage.getItem("matchPrediction"));
+
+    // if (savedPred && savedPred.date === todayStr) {
+    //     setSelection(savedPred.selection);
+    //     setIsSubmitted(true);
+    // }
+  }, []);
+
+  const handleSubmit = () => {
+    if (!selection) return;
+
+    // Save
+    const prediction = {
+      date: new Date().toDateString(),
+      selection: selection,
+      timestamp: Date.now()
+    };
+    localStorage.setItem("matchPrediction", JSON.stringify(prediction));
+    setIsSubmitted(true);
+  };
+
+  if (!myTeam) {
     return (
-        <Container>
-            <ContentWrapper>
-                <Header>
-                    <DateText>{TODAY_MATCH.date}</DateText>
-                    <Title>오늘의 승부 예측</Title>
-                </Header>
-
-                <MatchContainer>
-                    <TeamBlock>
-                        <TeamLogo>
-                            {myTeam.logo ? <img src={myTeam.logo} alt={myTeam.name} /> : "🦁"}
-                        </TeamLogo>
-                        <TeamName>{myTeam.name}</TeamName>
-                    </TeamBlock>
-
-                    <VS>VS</VS>
-
-                    <TeamBlock>
-                        <TeamLogo>{TODAY_MATCH.opponent.logo}</TeamLogo>
-                        <TeamName>{TODAY_MATCH.opponent.name}</TeamName>
-                    </TeamBlock>
-                </MatchContainer>
-
-                <PredictionSection>
-                    {!isSubmitted ? (
-                        <>
-                            <Question>오늘 우리 팀의 경기 결과는?</Question>
-                            <ButtonGroup>
-                                <PredictBtn
-                                    $type="win"
-                                    $selected={selection === 'win'}
-                                    onClick={() => setSelection('win')}
-                                >
-                                    승리 🔥
-                                </PredictBtn>
-                                <PredictBtn
-                                    $type="lose"
-                                    $selected={selection === 'lose'}
-                                    onClick={() => setSelection('lose')}
-                                >
-                                    패배 😭
-                                </PredictBtn>
-                            </ButtonGroup>
-                            <SubmitBtn
-                                onClick={handleSubmit}
-                                disabled={!selection}
-                            >
-                                예측 제출하기
-                            </SubmitBtn>
-                        </>
-                    ) : (
-                        <>
-                            <div style={{ fontSize: '3rem', marginBottom: '20px' }}>
-                                {selection === 'win' ? '🔥' : '😭'}
-                            </div>
-                            <Question>
-                                {selection === 'win' ? '승리를 예측하셨습니다!' : '패배를 예측하셨습니다...'}
-                            </Question>
-                            <ResultMessage>
-                                경기 결과가 나오면 포인트를 드려요!<br />
-                                (실제 경기 결과 연동은 준비중입니다)
-                            </ResultMessage>
-                        </>
-                    )}
-                </PredictionSection>
-
-                <BackLink onClick={() => navigate(-1)}>뒤로 가기</BackLink>
-            </ContentWrapper>
-        </Container>
+      <Container>
+        <ContentWrapper>
+          <h2>먼저 응원하는 팀을 선택해주세요!</h2>
+          <SubmitBtn onClick={() => navigate('/')}>홈으로 이동</SubmitBtn>
+        </ContentWrapper>
+      </Container>
     );
+  }
+
+  return (
+    <Container>
+      <ContentWrapper>
+        <Header>
+          <DateText>{TODAY_MATCH.date}</DateText>
+          <Title>오늘의 승부 예측</Title>
+        </Header>
+
+        <MatchContainer>
+          <TeamBlock>
+            <TeamLogo>
+              {myTeam.logo ? <img src={myTeam.logo} alt={myTeam.name} /> : "🦁"}
+            </TeamLogo>
+            <TeamName>{myTeam.name}</TeamName>
+          </TeamBlock>
+
+          <VS>VS</VS>
+
+          <TeamBlock>
+            <TeamLogo>
+              <img src={TODAY_MATCH.opponent.logo} alt={TODAY_MATCH.opponent.name} />
+            </TeamLogo>
+            <TeamName>{TODAY_MATCH.opponent.name}</TeamName>
+          </TeamBlock>
+        </MatchContainer>
+
+        <PredictionSection>
+          {!isSubmitted ? (
+            <>
+              <Question>오늘 우리 팀의 경기 결과는?</Question>
+              <ButtonGroup>
+                <PredictBtn
+                  $type="win"
+                  $selected={selection === 'win'}
+                  onClick={() => setSelection('win')}
+                >
+                  승리 🔥
+                </PredictBtn>
+                <PredictBtn
+                  $type="lose"
+                  $selected={selection === 'lose'}
+                  onClick={() => setSelection('lose')}
+                >
+                  패배
+                </PredictBtn>
+              </ButtonGroup>
+              <SubmitBtn
+                onClick={handleSubmit}
+                disabled={!selection}
+              >
+                예측 제출하기
+              </SubmitBtn>
+            </>
+          ) : (
+            <>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>
+                {selection === 'win' ? '🔥' : '😭'}
+              </div>
+              <Question>
+                {selection === 'win' ? '승리를 예측하셨습니다!' : '패배를 예측하셨습니다...'}
+              </Question>
+              <ResultMessage>
+                경기 결과가 나오면 포인트를 드려요!<br />
+                (실제 경기 결과 연동은 준비중입니다)
+              </ResultMessage>
+            </>
+          )}
+        </PredictionSection>
+
+        <BackLink onClick={() => navigate(-1)}>뒤로 가기</BackLink>
+      </ContentWrapper>
+    </Container>
+  );
 };
 
 export default MatchPrediction;

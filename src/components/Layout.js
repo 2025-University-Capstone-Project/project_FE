@@ -9,6 +9,7 @@ import {
   NavItem,
   ContentWrapper,
 } from "../styles";
+import teamThemes from "../theme/teams";
 
 // --- Animations ---
 const swing = keyframes`
@@ -90,17 +91,31 @@ const Baseball = () => (
   </svg>
 );
 
+
+
+// ... (existing imports)
+
 const Layout = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!localStorage.getItem("loggedInUser"));
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const dropdownRef = React.useRef(null);
+  const [teamColor, setTeamColor] = React.useState('#ddd');
 
-  // Listen for auth changes
+  // Listen for auth changes and team changes
   React.useEffect(() => {
-    const checkAuth = () => setIsLoggedIn(!!localStorage.getItem("loggedInUser"));
+    const checkAuth = () => {
+      setIsLoggedIn(!!localStorage.getItem("loggedInUser"));
+
+      const teamStr = localStorage.getItem("myTeam");
+      if (teamStr) {
+        const teamId = JSON.parse(teamStr).id;
+        if (teamThemes[teamId]) {
+          setTeamColor(teamThemes[teamId].primaryColor);
+        }
+      }
+    };
     window.addEventListener("auth-change", checkAuth);
-    // double check on mount
     checkAuth();
     return () => window.removeEventListener("auth-change", checkAuth);
   }, []);
@@ -120,9 +135,10 @@ const Layout = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("myTeam"); // Clear team selection to reset theme
     window.dispatchEvent(new Event("auth-change"));
     alert("로그아웃 되었습니다.");
-    navigate("/");
+    window.location.href = "/"; // Force reload to apply default theme
   };
 
   return (
@@ -138,7 +154,7 @@ const Layout = () => {
 
         {isLoggedIn ? (
           <ProfileMenu ref={dropdownRef} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-            <ProfileIcon>
+            <ProfileIcon borderColor={teamColor}>
               <img
                 src={JSON.parse(localStorage.getItem("loggedInUser"))?.profileImage || "/assets/default_profile.png"}
                 alt="Profile"
@@ -186,7 +202,7 @@ const ProfileIcon = styled.div`
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid #ddd;
+  border: 3px solid ${props => props.borderColor || '#ddd'};
   
   img {
     width: 100%;

@@ -585,7 +585,7 @@ const ExcitingZone = () => {
                   오늘 경기 결과를 예측하고<br />
                   포인트를 획득하세요!
                 </HeroDesc>
-                <PlayPill>🔮 예측하기</PlayPill>
+                <PlayPill>예측하기</PlayPill>
               </HeroContent>
               <DecorBlock style={{ fontSize: '7rem', right: '30px' }}>🔮</DecorBlock>
             </HeroCard>
