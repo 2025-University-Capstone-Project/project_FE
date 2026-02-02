@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import teamThemes from '../theme/teams';
 
-// Real KBO Schedule Data (Extracted from koreabaseball.com)
+// Real KBO Schedule Data (Starts March 28th)
 const fullSchedule = [
   { date: "03.28(토)", time: "14:00", match: "vs. LG (잠실)", home: "LG", away: "KT" },
   { date: "03.28(토)", time: "14:00", match: "vs. SSG (문학)", home: "SSG", away: "KIA" },
@@ -21,18 +21,18 @@ const fullSchedule = [
   { date: "03.31(화)", time: "18:30", match: "vs. 한화 (대전)", home: "한화", away: "KT" }
 ];
 
-// Mock Data for Ranking
-const mockRanking = [
-  { rank: 1, team: "KIA", win: 25, lose: 10, draw: 0 },
-  { rank: 2, team: "NC", win: 23, lose: 12, draw: 1 },
-  { rank: 3, team: "LG", win: 22, lose: 14, draw: 0 },
-  { rank: 4, team: "두산", win: 20, lose: 16, draw: 1 },
-  { rank: 5, team: "SSG", win: 19, lose: 17, draw: 0 },
-  { rank: 6, team: "KT", win: 18, lose: 18, draw: 1 },
-  { rank: 7, team: "한화", win: 16, lose: 20, draw: 0 },
-  { rank: 8, team: "삼성", win: 15, lose: 21, draw: 0 },
-  { rank: 9, team: "키움", win: 14, lose: 22, draw: 0 },
-  { rank: 10, team: "롯데", win: 12, lose: 24, draw: 0 },
+// Real KBO Team Rankings (2025 Final)
+const realRanking = [
+  { rank: 1, team: "LG", win: 85, lose: 56, draw: 3, rate: "0.603" },
+  { rank: 2, team: "한화", win: 83, lose: 57, draw: 4, rate: "0.593" },
+  { rank: 3, team: "SSG", win: 75, lose: 65, draw: 4, rate: "0.536" },
+  { rank: 4, team: "삼성", win: 74, lose: 68, draw: 2, rate: "0.521" },
+  { rank: 5, team: "NC", win: 71, lose: 67, draw: 6, rate: "0.514" },
+  { rank: 6, team: "KT", win: 71, lose: 68, draw: 5, rate: "0.511" },
+  { rank: 7, team: "롯데", win: 66, lose: 72, draw: 6, rate: "0.478" },
+  { rank: 8, team: "KIA", win: 65, lose: 75, draw: 4, rate: "0.464" },
+  { rank: 9, team: "두산", win: 61, lose: 77, draw: 6, rate: "0.442" },
+  { rank: 10, team: "키움", win: 47, lose: 93, draw: 4, rate: "0.336" },
 ];
 
 // Mock Data for Point History
@@ -42,12 +42,57 @@ const mockPointHistory = [
   { date: "05/12", desc: "출석 체크", points: "+5" },
   { date: "05/11", desc: "예측 성공", points: "+50" },
   { date: "05/10", desc: "퀴즈 정답", points: "+10" },
+  { date: "05/09", desc: "출석 체크", points: "+5" },
+  { date: "05/08", desc: "직관 승리", points: "+100" },
+  { date: "05/07", desc: "퀴즈 정답", points: "+10" },
 ];
+
+// SVG Icons
+const Icons = {
+  Trophy: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+      <path d="M4 22h16" />
+      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+    </svg>
+  ),
+  Calendar: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+      <line x1="16" x2="16" y1="2" y2="6" />
+      <line x1="8" x2="8" y1="2" y2="6" />
+      <line x1="3" x2="21" y1="10" y2="10" />
+    </svg>
+  ),
+  Check: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+      <polyline points="22 4 12 14.01 9 11.01" />
+    </svg>
+  ),
+  Megaphone: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m3 11 18-5v12L3 14v-3z" />
+      <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+    </svg>
+  ),
+  Coin: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+      <path d="M12 18V6" />
+    </svg>
+  )
+};
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [myTeam, setMyTeam] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   useEffect(() => {
     const userStr = localStorage.getItem('loggedInUser');
@@ -60,23 +105,25 @@ const Profile = () => {
   if (!user) return null;
 
   const userTeamTheme = myTeam && teamThemes[myTeam.id] ? teamThemes[myTeam.id] : teamThemes.default;
-
-  // Filter schedule for My Team if selected, otherwise show all (or just top 3 for dashboard)
-  const dashboardSchedule = fullSchedule.slice(0, 3); // Show top 3
+  const dashboardSchedule = fullSchedule.slice(0, 3);
+  const dashboardHistory = mockPointHistory.slice(0, 5);
 
   return (
     <Container>
       <PageHeader>
-        <Title>마이 대시보드</Title>
+        <Title style={{ color: 'white' }}>My Dashboard</Title>
       </PageHeader>
 
       <SketchLayout>
 
-        {/* Left Column: Team Ranking (Full Height) */}
+        {/* Left Column: Team Ranking */}
         <ColLeft>
-          <DashboardCard style={{ height: '100%' }}>
+          <DashboardCard>
             <CardHeader>
-              <h3>🏆 팀 순위</h3>
+              <TitleGroup>
+                <IconBox color="#FFD700"><Icons.Trophy /></IconBox>
+                <h3>팀 순위</h3>
+              </TitleGroup>
             </CardHeader>
             <ScrollableContent>
               <RankTable>
@@ -86,15 +133,17 @@ const Profile = () => {
                     <th>팀</th>
                     <th>승</th>
                     <th>패</th>
+                    <th>무</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {mockRanking.map((row) => (
+                  {realRanking.map((row) => (
                     <tr key={row.rank} className={myTeam && myTeam.name.includes(row.team) ? "highlight" : ""}>
                       <td>{row.rank}</td>
                       <td>{row.team}</td>
                       <td>{row.win}</td>
                       <td>{row.lose}</td>
+                      <td style={{ color: '#999' }}>{row.draw}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -107,7 +156,7 @@ const Profile = () => {
         <ColCenter>
 
           {/* 1. User Profile */}
-          <UserProfileCard style={{ background: `linear-gradient(135deg, ${userTeamTheme.primaryColor} 0%, ${userTeamTheme.secondaryColor} 100%)` }}>
+          <UserProfileCard style={{ background: `linear-gradient(120deg, ${userTeamTheme.primaryColor}, ${userTeamTheme.secondaryColor})` }}>
             <Avatar>{user.nickname ? user.nickname[0] : "U"}</Avatar>
             <div className="info">
               <h3>{user.nickname || user.id} 님</h3>
@@ -119,8 +168,11 @@ const Profile = () => {
           {/* 2. Schedule */}
           <DashboardCard>
             <CardHeader>
-              <h3>📅 경기 일정</h3>
-              <span onClick={() => setIsModalOpen(true)}>더보기</span>
+              <TitleGroup>
+                <IconBox color="#4da6ff"><Icons.Calendar /></IconBox>
+                <h3>경기 일정</h3>
+              </TitleGroup>
+              <MoreButton onClick={() => setIsScheduleModalOpen(true)}>더보기</MoreButton>
             </CardHeader>
             <MiniScheduleList>
               {dashboardSchedule.map((game, i) => (
@@ -136,9 +188,14 @@ const Profile = () => {
             </MiniScheduleList>
           </DashboardCard>
 
-          {/* 3. Attendance (New) */}
+          {/* 3. Attendance */}
           <DashboardCard>
-            <CardHeader><h3>✅ 출석 체크</h3></CardHeader>
+            <CardHeader>
+              <TitleGroup>
+                <IconBox color="#00cc66"><Icons.Check /></IconBox>
+                <h3>출석 체크</h3>
+              </TitleGroup>
+            </CardHeader>
             <AttendanceBox>
               <div className="status">오늘 출석 완료!</div>
               <p>연속 5일 출석 중 🔥</p>
@@ -153,7 +210,12 @@ const Profile = () => {
 
           {/* 1. My Team */}
           <DashboardCard>
-            <CardHeader><h3>📢 나의 팀</h3></CardHeader>
+            <CardHeader>
+              <TitleGroup>
+                <IconBox color={userTeamTheme.primaryColor}><Icons.Megaphone /></IconBox>
+                <h3>나의 팀</h3>
+              </TitleGroup>
+            </CardHeader>
             <MyTeamContent>
               {myTeam ? (
                 <>
@@ -166,11 +228,17 @@ const Profile = () => {
           </DashboardCard>
 
           {/* 2. Point History */}
-          <DashboardCard style={{ flex: 1 }}>
-            <CardHeader><h3>💰 적립 내역</h3></CardHeader>
+          <DashboardCard className="fill-height">
+            <CardHeader>
+              <TitleGroup>
+                <IconBox color="#ff9933"><Icons.Coin /></IconBox>
+                <h3>적립 내역</h3>
+              </TitleGroup>
+              <MoreButton onClick={() => setIsHistoryModalOpen(true)}>더보기</MoreButton>
+            </CardHeader>
             <ScrollableContent>
               <MiniList>
-                {mockPointHistory.map((h, i) => (
+                {dashboardHistory.map((h, i) => (
                   <li key={i}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       <span className="date">{h.date}</span>
@@ -186,13 +254,16 @@ const Profile = () => {
 
       </SketchLayout>
 
-      {/* Schedule Modal */}
-      {isModalOpen && (
-        <ModalOverlay onClick={() => setIsModalOpen(false)}>
+      {/* Modal: Schedule */}
+      {isScheduleModalOpen && (
+        <ModalOverlay onClick={() => setIsScheduleModalOpen(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <ModalHeader>
-              <h2>📅 전체 경기 일정</h2>
-              <CloseButton onClick={() => setIsModalOpen(false)}>&times;</CloseButton>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <IconBox color="#4da6ff" size="30px"><Icons.Calendar /></IconBox>
+                <h2>전체 경기 일정</h2>
+              </div>
+              <CloseButton onClick={() => setIsScheduleModalOpen(false)}>&times;</CloseButton>
             </ModalHeader>
             <ModalBody>
               <ScheduleTable>
@@ -224,6 +295,41 @@ const Profile = () => {
         </ModalOverlay>
       )}
 
+      {/* Modal: Points History */}
+      {isHistoryModalOpen && (
+        <ModalOverlay onClick={() => setIsHistoryModalOpen(false)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <IconBox color="#ff9933" size="30px"><Icons.Coin /></IconBox>
+                <h2>전체 적립 내역</h2>
+              </div>
+              <CloseButton onClick={() => setIsHistoryModalOpen(false)}>&times;</CloseButton>
+            </ModalHeader>
+            <ModalBody>
+              <HistoryTable>
+                <thead>
+                  <tr>
+                    <th>날짜</th>
+                    <th>내용</th>
+                    <th>포인트</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockPointHistory.map((h, i) => (
+                    <tr key={i}>
+                      <td>{h.date}</td>
+                      <td style={{ textAlign: 'left' }}>{h.desc}</td>
+                      <td style={{ color: 'green', fontWeight: 'bold' }}>{h.points}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </HistoryTable>
+            </ModalBody>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+
     </Container>
   );
 };
@@ -238,11 +344,11 @@ const Container = styled.div`
 `;
 
 const PageHeader = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `;
 
 const Title = styled.h1`
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 800;
   color: #333;
 `;
@@ -250,9 +356,8 @@ const Title = styled.h1`
 const SketchLayout = styled.div`
   display: grid;
   grid-template-columns: 280px 1fr 280px; 
-  gap: 20px;
-  min-height: 600px;
-
+  gap: 25px; /* Increased gap for better separation */
+  
   @media (max-width: 1024px) {
     grid-template-columns: 1fr 1fr;
   }
@@ -269,135 +374,187 @@ const ColLeft = styled.div`
 const ColCenter = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 `;
 
 const ColRight = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 `;
 
+// Updated DashboardCard style for "Premium" look
 const DashboardCard = styled.div`
   background: white;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border: 1px solid #f0f0f0;
+  padding: 24px;
+  border-radius: 24px; /* More rounded corners */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06); /* Softer, deeper shadow */
+  border: none; /* Removed border */
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  color: #333; 
+  color: #333;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  }
+
+  &.fill-height {
+    flex: 1; 
+    min-height: 0;
+  }
 `;
 
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  h3 { font-size: 1rem; font-weight: 700; color: #333; margin: 0; }
-  span { font-size: 0.8rem; color: #999; cursor: pointer; }
+  margin-bottom: 20px;
+  h3 { font-size: 1.1rem; font-weight: 700; color: #222; margin: 0; }
+`;
+
+const TitleGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const IconBox = styled.div`
+  width: ${props => props.size || '36px'};
+  height: ${props => props.size || '36px'};
+  border-radius: 12px;
+  background-color: ${props => props.color}20; /* 20% opacity background */
+  color: ${props => props.color};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+`;
+
+const MoreButton = styled.span`
+  font-size: 0.85rem;
+  color: #aaa;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.2s;
+  &:hover { color: #666; }
 `;
 
 const UserProfileCard = styled.div`
-  padding: 25px;
-  border-radius: 20px;
+  padding: 30px;
+  border-radius: 24px;
   color: white;
   display: flex;
   align-items: center;
-  gap: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  gap: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
   position: relative;
   
   .info {
     flex: 1;
-    h3 { margin: 0; font-size: 1.4rem; font-weight: 800; color: white; }
-    p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.9; color: rgba(255,255,255,0.9); }
+    h3 { margin: 0 0 5px 0; font-size: 1.6rem; font-weight: 800; color: white; }
+    p { margin: 0; font-size: 0.95rem; opacity: 0.9; color: rgba(255,255,255,0.9); }
   }
 `;
 
 const Avatar = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  border-radius: 20px; /* Squircle */
   background: rgba(255,255,255,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
-  border: 2px solid rgba(255,255,255,0.5);
+  border: 2px solid rgba(255,255,255,0.3);
   color: white;
+  backdrop-filter: blur(5px);
 `;
 
 const PointsTag = styled.div`
-  background: rgba(255,255,255,0.2);
-  padding: 8px 15px;
-  border-radius: 12px;
-  font-weight: bold;
-  font-size: 1.1rem;
+  background: rgba(255,255,255,0.25);
+  padding: 10px 20px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 1.2rem;
   color: white;
+  backdrop-filter: blur(5px);
 `;
 
 const RankTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  th { text-align: left; color: #999; font-size: 0.8rem; padding-bottom: 8px; }
-  td { padding: 8px 0; border-bottom: 1px solid #f9f9f9; color: #333; font-weight: 600; font-size: 0.9rem; }
-  .highlight td { color: #d32f2f; }
+  th { text-align: center; color: #aaa; font-size: 0.8rem; padding-bottom: 12px; font-weight: 600; }
+  td { padding: 14px 0; border-bottom: 1px solid #f5f5f5; color: #444; font-weight: 600; font-size: 0.9rem; text-align: center; }
+  .highlight td { color: #e91e63; font-weight: 800; }
 `;
 
 const ScrollableContent = styled.div`
   flex: 1;
   overflow-y: auto;
-  &::-webkit-scrollbar { width: 3px; }
-  &::-webkit-scrollbar-thumb { background: #eee; border-radius: 3px; }
+  padding-right: 5px;
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: #eee; border-radius: 4px; }
 `;
 
 const MiniScheduleList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   .item {
-    background: #f9f9f9;
-    padding: 12px;
-    border-radius: 10px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #555;
-    .date { font-weight: bold; color: #333; }
+    transition: background 0.2s;
+    &:hover { background: #f0f2f5; }
+    .date { font-weight: 700; color: #333; }
     .match-info { 
        display: flex; 
-       gap: 5px; 
+       gap: 6px; 
        font-weight: 600;
-       .vs { color: #999; font-weight: normal; }
+       .vs { color: #999; font-weight: normal; font-size: 0.85rem; }
     }
   }
 `;
 
 const AttendanceBox = styled.div`
   text-align: center;
-  padding: 10px 0;
-  .status { font-size: 1.1rem; font-weight: bold; color: #4CAF50; margin-bottom: 5px; }
-  p { color: #888; font-size: 0.9rem; margin-bottom: 10px; }
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  
+  .status { font-size: 1.2rem; font-weight: 800; color: #00cc66; }
+  p { color: #888; font-size: 0.95rem; margin: 0; }
   button {
     background: #333;
     color: white;
     border: none;
-    padding: 8px 20px;
-    border-radius: 20px;
+    padding: 12px 30px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: transform 0.1s;
+    &:active { transform: scale(0.98); }
   }
 `;
 
 const MyTeamContent = styled.div`
   text-align: center;
-  img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 10px; }
-  h4 { margin: 0 0 5px; font-size: 1.1rem; color: #333; }
-  p { margin: 0; color: #888; font-size: 0.8rem; }
+  padding: 10px 0;
+  img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 15px; drop-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  h4 { margin: 0 0 8px; font-size: 1.2rem; color: #333; font-weight: 800; }
+  p { margin: 0; color: #888; font-size: 0.9rem; }
 `;
 
 const MiniList = styled.ul`
@@ -408,12 +565,12 @@ const MiniList = styled.ul`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    font-size: 0.85rem;
-    border-bottom: 1px solid #f5f5f5;
-    .date { color: #999; font-size: 0.8rem; display:block; margin-bottom: 2px;}
-    .desc { flex: 1; color: #333; font-weight: 500; }
-    .point { font-weight: bold; color: #4CAF50; font-size: 0.9rem;}
+    padding: 14px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px dashed #eee;
+    .date { color: #aaa; font-size: 0.85rem; display:block; margin-bottom: 3px; font-weight: 500;}
+    .desc { flex: 1; color: #444; font-weight: 600; }
+    .point { font-weight: 800; color: #ff9933; font-size: 1rem;}
   }
 `;
 
@@ -424,75 +581,91 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px);
 `;
 
 const ModalContent = styled.div`
   background: white;
   width: 90%;
-  max-width: 600px; /* Wider for table */
-  max-height: 80vh;
-  border-radius: 20px;
+  max-width: 650px;
+  max-height: 85vh;
+  border-radius: 28px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
   @keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from { transform: translateY(40px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
   }
 `;
 
 const ModalHeader = styled.div`
-  padding: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 25px 30px;
+  border-bottom: 1px solid #f5f5f5;
   display: flex;
   justify-content: space-between;
   align-items: center;
   
-  h2 { margin: 0; font-size: 1.2rem; color: #333; }
+  h2 { margin: 0; font-size: 1.4rem; color: #333; font-weight: 800; }
 `;
 
 const CloseButton = styled.button`
-  background: none;
+  background: #f5f5f5;
   border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  color: #999;
-  &:hover { color: #333; }
+  color: #666;
+  transition: all 0.2s;
+  &:hover { background: #eee; color: #333; }
 `;
 
 const ModalBody = styled.div`
-  padding: 20px;
+  padding: 30px;
   overflow-y: auto;
 `;
 
 const ScheduleTable = styled.table`
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   
   th { 
     text-align: center; 
-    padding: 12px; 
-    background: #f9f9f9; 
-    color: #666; 
+    padding: 15px; 
+    background: #f8f9fa; 
+    color: #888; 
     font-size: 0.9rem; 
-    border-radius: 8px;
+    font-weight: 600;
   }
+  th:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+  th:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
   td { 
-    padding: 15px 10px; 
-    border-bottom: 1px solid #eee; 
+    padding: 18px 10px; 
+    border-bottom: 1px solid #f0f0f0; 
     color: #333; 
     text-align: center;
     font-size: 0.95rem;
+    font-weight: 500;
   }
   tr:last-child td { border-bottom: none; }
+`;
+
+const HistoryTable = styled(ScheduleTable)`
+  td { text-align: center; }
 `;
 
 export default Profile;
