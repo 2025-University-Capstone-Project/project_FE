@@ -147,7 +147,7 @@ const Layout = () => {
       <Header>
         <LogoContainer onClick={() => navigate("/")}>
           <IconWrapper>
-            ⚾️
+            <span className="ball">⚾️</span>
           </IconWrapper>
           <SiteTitle>Y.P.T</SiteTitle>
         </LogoContainer>
@@ -174,13 +174,18 @@ const Layout = () => {
       </Header>
 
       {/* 메뉴바 */}
-      <Navbar>
-        <NavItem as={Link} to="/profile">내 정보</NavItem>
-        <NavItem as={Link} to="/">홈</NavItem>
-        <NavItem as={Link} to="/diary">나의 직관일지</NavItem>
-        <NavItem as={Link} to="/excitingzone">익사이팅존</NavItem>
-        <NavItem as={Link} to="/guidezone">직관 가이드</NavItem>
-      </Navbar>
+      {/* 메뉴바 (로그인 시에만 표시) */}
+      {isLoggedIn ? (
+        <Navbar>
+          <NavItem as={Link} to="/profile">내 정보</NavItem>
+          <NavItem as={Link} to="/">홈</NavItem>
+          <NavItem as={Link} to="/diary">나의 직관일지</NavItem>
+          <NavItem as={Link} to="/excitingzone">익사이팅존</NavItem>
+          <NavItem as={Link} to="/guidezone">직관 가이드</NavItem>
+        </Navbar>
+      ) : (
+        <div style={{ height: '80px' }} />
+      )}
 
       {/* 페이지별 콘텐츠 */}
       <ContentWrapper>
