@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
+import { getHolidayName } from "../utils/holidays";
 
 // --- Styled Components ---
 
@@ -106,6 +107,7 @@ const DayCell = styled.div`
   width: 60px;
   margin: 0 auto;
   display: flex;
+  flex-direction: column; /* Allow text below number */
   justify-content: center;
   align-items: center;
   border-radius: 50%;
@@ -134,6 +136,13 @@ const DayCell = styled.div`
     color: ${({ $isPlaceholder }) => $isPlaceholder ? "#eee" : "white"};
     opacity: 0.8;
   }
+`;
+
+const HolidayText = styled.span`
+  font-size: 0.6rem;
+  margin-top: 2px;
+  color: #E30113;
+  white-space: nowrap;
 `;
 
 const months = [
@@ -187,15 +196,19 @@ const Calendar = () => {
       const isSunday = currentDate.getDay() === 0;
       const isToday = today.getDate() === day && today.getMonth() + 1 === month && today.getFullYear() === year;
 
+      // 공휴일 확인
+      const holidayName = getHolidayName(year, month, day);
+
       days.push(
         <DayCell
           key={day}
           onClick={() => handleDateClick(day)}
           $hasEntry={!!diaryEntries[dateKey]}
-          $isHoliday={isSunday} /* Simple holiday logic: Sundays are red */
+          $isHoliday={isSunday || !!holidayName}
           $isToday={isToday}
         >
           {day}
+          {holidayName && <HolidayText>{holidayName}</HolidayText>}
         </DayCell>
       );
     }
