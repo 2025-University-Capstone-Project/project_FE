@@ -41,7 +41,7 @@ const DiaryList = () => {
     return (
         <Wrapper>
             <Container>
-                <Title>일기 모아보기</Title>
+                <Title>일지 모아보기</Title>
 
                 <FilterSection>
                     <DateGroup>
@@ -72,7 +72,7 @@ const DiaryList = () => {
                             <ItemDate>{entry.date}</ItemDate>
                         </ListItem>
                     ))}
-                    {sortedEntries.length === 0 && <EmptyMsg>표시할 일기가 없습니다.</EmptyMsg>}
+                    {sortedEntries.length === 0 && <EmptyMsg>표시할 일지가 없습니다.</EmptyMsg>}
                 </ListContainer>
 
                 <Pagination>

@@ -21,9 +21,12 @@ const CalendarWrapper = styled.div`
   z-index: 10;
 `;
 
+// ... imports
+
+// ... Styled Components (Sidebar updated)
 const Sidebar = styled.div`
   width: 30%;
-  background: ${({ theme }) => theme.primaryColor || "#6b48ff"}; /* Theme Color */
+  background: ${({ theme }) => theme.primaryColor || "#6b48ff"};
   color: white;
   padding: 40px;
   display: flex;
@@ -31,6 +34,8 @@ const Sidebar = styled.div`
   justify-content: space-between;
   position: relative;
 `;
+
+// ...
 
 const HeaderNav = styled.div`
   display: flex;
@@ -51,7 +56,10 @@ const MonthList = styled.div`
   flex-direction: column;
   gap: 15px;
   margin-top: 40px;
+  margin-bottom: 20px;
+  flex: 1; /* Take remaining space */
   overflow-y: auto;
+  min-height: 0; /* Crucial for flex scrolling */
   
   /* Hide scrollbar */
   &::-webkit-scrollbar { display: none; }
@@ -68,6 +76,23 @@ const MonthItem = styled.div`
   
   &:hover {
     background: rgba(255,255,255,0.1);
+  }
+`;
+
+const ListLinkBtn = styled.button`
+  flex-shrink: 0;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s;
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
   }
 `;
 
@@ -103,42 +128,6 @@ const DayLabel = styled.div`
   margin-bottom: 20px;
 `;
 
-const DayCell = styled.div`
-  height: 60px;
-  width: 60px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column; /* Allow text below number */
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  font-size: 1.1rem;
-  font-weight: ${({ $isToday }) => $isToday ? "bold" : "normal"};
-  cursor: ${({ $isPlaceholder }) => $isPlaceholder ? "default" : "pointer"};
-  position: relative;
-  transition: all 0.2s;
-  
-  /* Background Logic */
-  background: ${({ $hasEntry, theme }) => $hasEntry ? (theme.secondaryColor || "#FFC600") : "transparent"};
-  
-  /* Text Color Logic */
-  color: ${({ $hasEntry, $isHoliday, $isPlaceholder }) => {
-    if ($hasEntry) return "white";
-    if ($isPlaceholder) return "#eee";
-    if ($isHoliday) return "#E30113"; /* Holiday Red */
-    return "#333";
-  }};
-
-  /* Today Marker (Border) */
-  border: ${({ $isToday, theme }) => $isToday ? `2px solid ${theme.primaryColor || "#333"}` : "2px solid transparent"};
-
-  &:hover {
-    background: ${({ $isPlaceholder, theme }) => $isPlaceholder ? "transparent" : (theme.primaryColor || "#eee")};
-    color: ${({ $isPlaceholder }) => $isPlaceholder ? "#eee" : "white"};
-    opacity: 0.8;
-  }
-`;
-
 const HolidayText = styled.span`
   font-size: 0.6rem;
   margin-top: 2px;
@@ -151,7 +140,55 @@ const months = [
   "July", "August", "September", "October", "November", "December"
 ];
 
+// ...
+
+const DayCell = styled.div`
+  height: 60px;
+  width: 60px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: ${({ $isToday }) => $isToday ? "bold" : "normal"};
+  cursor: ${({ $isPlaceholder }) => $isPlaceholder ? "default" : "pointer"};
+  position: relative;
+  transition: all 0.2s;
+  
+  /* Background Logic */
+  background: ${({ $hasEntry, theme, $bgImage }) => {
+    if ($bgImage) return `url("${$bgImage}") center/cover no-repeat`; // Added quotes
+    if ($hasEntry) return (theme.secondaryColor || "#FFC600");
+    return "transparent";
+  }};
+  
+  /* Text Color Logic */
+  color: ${({ $hasEntry, $isHoliday, $isPlaceholder, $bgImage }) => {
+    if ($bgImage) return "white"; // White text on image
+    if ($hasEntry) return "white";
+    if ($isPlaceholder) return "#eee";
+    if ($isHoliday) return "#E30113";
+    return "#333";
+  }};
+
+  /* Text Shadow for readability on image */
+  text-shadow: ${({ $bgImage }) => $bgImage ? "0 2px 4px rgba(0,0,0,0.8)" : "none"};
+
+  /* Today Marker */
+  border: ${({ $isToday, theme }) => $isToday ? `2px solid ${theme.primaryColor || "#333"}` : "2px solid transparent"};
+
+  &:hover {
+    opacity: 0.8; 
+    transform: ${({ $isPlaceholder }) => $isPlaceholder ? "none" : "scale(1.1)"};
+  }
+`;
+
+// ...
+
 const Calendar = () => {
+  // ... (state setup)
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth() + 1);
@@ -162,14 +199,9 @@ const Calendar = () => {
     setDiaryEntries(savedEntries);
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("diaryEntries", JSON.stringify(diaryEntries));
-  }, [diaryEntries]);
-
+  // ... (navigate, getDaysInMonth, etc.)
   const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
   const getFirstDayOfMonth = (year, month) => new Date(year, month - 1, 1).getDay();
-
-  /* Updated to use useNavigate */
   const navigate = useNavigate();
 
   const handleDateClick = (day) => {
@@ -183,27 +215,44 @@ const Calendar = () => {
 
   const renderDays = () => {
     const days = [];
-    // Empty placeholders
     for (let i = 0; i < firstDay; i++) {
       days.push(<DayCell key={`empty-${i}`} $isPlaceholder />);
     }
-    // Days
     for (let day = 1; day <= daysInMonth; day++) {
       const dateKey = `${year}-${month}-${day}`;
       const currentDate = new Date(year, month - 1, day);
       const isSunday = currentDate.getDay() === 0;
       const isToday = today.getDate() === day && today.getMonth() + 1 === month && today.getFullYear() === year;
-
-      // 공휴일 확인
       const holidayName = getHolidayName(year, month, day);
+
+      const entry = diaryEntries[dateKey];
+      const hasEntry = !!entry;
+
+      // Image Logic
+      let bgImage = null;
+      if (hasEntry) {
+        let images = [];
+        if (entry.images && Array.isArray(entry.images)) {
+          images = entry.images;
+        } else if (entry.image) {
+          images = [entry.image];
+        }
+
+        if (images.length > 0) {
+          // Randomly select one image
+          const randomIndex = Math.floor(Math.random() * images.length);
+          bgImage = images[randomIndex];
+        }
+      }
 
       days.push(
         <DayCell
           key={day}
           onClick={() => handleDateClick(day)}
-          $hasEntry={!!diaryEntries[dateKey]}
+          $hasEntry={hasEntry}
           $isHoliday={isSunday || !!holidayName}
           $isToday={isToday}
+          $bgImage={bgImage}
         >
           {day}
           {holidayName && <HolidayText>{holidayName}</HolidayText>}
@@ -232,6 +281,9 @@ const Calendar = () => {
             </MonthItem>
           ))}
         </MonthList>
+        <ListLinkBtn onClick={() => navigate('/diary/list')}>
+          📖 일지 모아보기
+        </ListLinkBtn>
       </Sidebar>
       <MainContent>
         <CurrentMonthTitle>{months[month - 1]}</CurrentMonthTitle>

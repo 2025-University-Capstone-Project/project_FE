@@ -320,7 +320,7 @@ const DiaryWrite = () => {
 
                 <DateHeader>
                     <span className="date-str">{year} / {month} / {day}</span>
-                    <h1>오늘의 일기</h1>
+                    <h1>오늘의 직관일지</h1>
                 </DateHeader>
 
                 {/* Title Input */}
