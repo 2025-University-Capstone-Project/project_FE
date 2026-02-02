@@ -93,6 +93,8 @@ const Baseball = () => (
 const Layout = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!localStorage.getItem("loggedInUser"));
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef(null);
 
   // Listen for auth changes
   React.useEffect(() => {
@@ -101,6 +103,19 @@ const Layout = () => {
     // double check on mount
     checkAuth();
     return () => window.removeEventListener("auth-change", checkAuth);
+  }, []);
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -122,7 +137,19 @@ const Layout = () => {
         </LogoContainer>
 
         {isLoggedIn ? (
-          <LoginButton onClick={handleLogout}>로그아웃</LoginButton>
+          <ProfileMenu ref={dropdownRef} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+            <ProfileIcon>
+              <img
+                src={JSON.parse(localStorage.getItem("loggedInUser"))?.profileImage || "/assets/default_profile.png"}
+                alt="Profile"
+              />
+            </ProfileIcon>
+            {isDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem onClick={handleLogout}>로그아웃</DropdownItem>
+              </DropdownMenu>
+            )}
+          </ProfileMenu>
         ) : (
           <Link to="/login">
             <LoginButton>로그인</LoginButton>
@@ -146,5 +173,51 @@ const Layout = () => {
     </Container>
   );
 };
+
+
+// --- Profile Dropdown Styles ---
+const ProfileMenu = styled.div`
+  position: relative;
+  cursor: pointer;
+`;
+
+const ProfileIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #ddd;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 120px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 100;
+  border: 1px solid #eee;
+`;
+
+const DropdownItem = styled.div`
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s;
+  
+  &:hover {
+    background: #f5f5f5;
+    color: #ff5252;
+  }
+`;
 
 export default Layout;

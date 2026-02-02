@@ -157,7 +157,37 @@ const Profile = () => {
 
           {/* 1. User Profile */}
           <UserProfileCard style={{ background: `linear-gradient(120deg, ${userTeamTheme.primaryColor}, ${userTeamTheme.secondaryColor})` }}>
-            <Avatar>{user.nickname ? user.nickname[0] : "U"}</Avatar>
+            <AvatarContainer>
+              <Avatar onClick={() => document.getElementById('profile-upload').click()}>
+                {user.profileImage ? (
+                  <img src={user.profileImage} alt="Profile" />
+                ) : (
+                  <img src="/assets/default_profile.png" alt="Default Profile" />
+                )}
+              </Avatar>
+              <CameraBadge onClick={() => document.getElementById('profile-upload').click()}>
+                📷
+              </CameraBadge>
+              <input
+                type="file"
+                id="profile-upload"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      const newUser = { ...user, profileImage: reader.result };
+                      setUser(newUser);
+                      localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </AvatarContainer>
+
             <div className="info">
               <h3>{user.nickname || user.id} 님</h3>
               <p>오늘도 승리요정이 되어보세요!</p>
@@ -459,6 +489,15 @@ const UserProfileCard = styled.div`
   }
 `;
 
+const AvatarContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+  
+  &:hover .overlay {
+    opacity: 1;
+  }
+`;
+
 const Avatar = styled.div`
   width: 70px;
   height: 70px;
@@ -472,6 +511,36 @@ const Avatar = styled.div`
   border: 2px solid rgba(255,255,255,0.3);
   color: white;
   backdrop-filter: blur(5px);
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const CameraBadge = styled.div`
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 2;
+  border: 1px solid #eee;
+  
+  &:hover {
+    background: #f0f0f0;
+  }
 `;
 
 const PointsTag = styled.div`
