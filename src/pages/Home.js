@@ -136,7 +136,34 @@ const PredictionBanner = styled.div`
   }
 `;
 
-// ... (other styled components remain same if not touched)
+const BannerContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+`;
+
+const BannerTitle = styled.h2`
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+`;
+
+const BannerText = styled.p`
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+`;
+
+const BannerButton = styled.div`
+  background: white;
+  color: #6b48ff;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  z-index: 2;
+`;
 
 const Home = () => {
   const [isSelectorVisible, setSelectorVisible] = useState(false);
