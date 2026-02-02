@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { getHolidayName } from "../utils/holidays";
 
 // --- Styled Components ---
@@ -168,16 +169,13 @@ const Calendar = () => {
   const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
   const getFirstDayOfMonth = (year, month) => new Date(year, month - 1, 1).getDay();
 
+  /* Updated to use useNavigate */
+  const navigate = useNavigate();
+
   const handleDateClick = (day) => {
     if (!day) return;
     const dateKey = `${year}-${month}-${day}`;
-    const text = prompt("일기 내용을 입력하세요:", diaryEntries[dateKey] || "");
-    if (text !== null) {
-      setDiaryEntries((prev) => ({
-        ...prev,
-        [dateKey]: text.trim() ? text : undefined,
-      }));
-    }
+    navigate(`/diary/write/${dateKey}`);
   };
 
   const daysInMonth = getDaysInMonth(year, month);

@@ -5,6 +5,9 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Diary from "./pages/Diary";
+import DiaryWrite from "./pages/DiaryWrite";
+import DiaryList from "./pages/DiaryList";
+import DiaryDetail from "./pages/DiaryDetail";
 import SignUp from "./pages/SignUp";
 import ExcitingZone from './pages/ExcitingZone';
 import GuideZone from './pages/GuideZone';
@@ -32,6 +35,9 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="diary" element={<Diary />} />
+            <Route path="diary/write/:date" element={<DiaryWrite />} />
+            <Route path="diary/list" element={<DiaryList />} />
+            <Route path="diary/detail/:date" element={<DiaryDetail />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="excitingzone" element={<ExcitingZone />} />
