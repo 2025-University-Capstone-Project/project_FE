@@ -86,8 +86,8 @@ const ruleData = [
 ];
 
 const songData = [
-  { type: "text", question: "🎵 부산 갈매기~ 부산 갈매기~ (어디 응원가?)", answer: "롯데" },
-  { type: "text", question: "🎵 아파트 아파트 아파트 아파트~ (누구 응원가?)", answer: "윤수일" },
+  { type: "song", question: "이 응원가는 어떤 팀의 것일까요? (🎵 재생 버튼을 눌러보세요)", answer: "KIA", videoId: "AxXHj7SF9b4" },
+  { type: "song", question: "이 응원가는 어떤 팀의 것일까요? (🎵 재생 버튼을 눌러보세요)", answer: "LG", videoId: "P5Q95LpxCb0" },
 ];
 
 const categories = ["인물 퀴즈", "응원가 퀴즈", "등번호 퀴즈"];
@@ -426,6 +426,48 @@ const HeroTextMain = styled.span`
   font-weight: 700;
 `;
 
+const HiddenFrame = styled.iframe`
+  width: 0;
+  height: 0;
+  border: none;
+  position: absolute;
+  visibility: hidden;
+`;
+
+const PlayAudioBtn = styled.button`
+  background: #ff5252;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255, 82, 82, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+  &:hover {
+    background: #ff1744;
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: default;
+  }
+`;
+
+const MediaQuestionText = styled.h3`
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.4;
+`;
+
 const ExcitingZone = () => {
   const navigate = useNavigate(); // Added hook
   const [gameMode, setGameMode] = useState(null); // 'person', 'song', 'rule'
@@ -435,6 +477,7 @@ const ExcitingZone = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [userAnswers, setUserAnswers] = useState([]); // Store history for review
+  const [isPlaying, setIsPlaying] = useState(false); // Audio playing state
 
   const startGame = (mode) => {
     let selectedData = [];
@@ -445,7 +488,7 @@ const ExcitingZone = () => {
       selectedData = shuffled.slice(0, 10);
     }
     else if (mode === 'song') selectedData = songData;
-    else if (mode === 'random') selectedData = [...personData, ...ruleData].sort(() => Math.random() - 0.5).slice(0, 10);
+    else if (mode === 'random') selectedData = [...personData, ...ruleData, ...songData].sort(() => Math.random() - 0.5).slice(0, 10);
 
     setGameMode(mode);
     setActiveData(selectedData);
@@ -454,6 +497,7 @@ const ExcitingZone = () => {
     setInput("");
     setUserAnswers([]);
     setGameOver(false);
+    setIsPlaying(false);
   };
 
   // Save score when game ends
@@ -499,6 +543,7 @@ const ExcitingZone = () => {
     if (currentIndex + 1 < activeData.length) {
       setCurrentIndex(prev => prev + 1);
       setInput("");
+      setIsPlaying(false); // Reset audio for next question
     } else {
       setGameOver(true);
     }
@@ -606,11 +651,37 @@ const ExcitingZone = () => {
             <QuizImage src={activeData[currentIndex].img} alt="Quiz Target" />
           )}
 
+          {/* SONG QUESTION (YOUTUBE) */}
+          {activeData[currentIndex].type === 'song' && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}>
+              <PlayAudioBtn
+                onClick={() => setIsPlaying(true)}
+                disabled={isPlaying}
+              >
+                {isPlaying ? "🔈 재생 중..." : "🎵 노래 재생하기"}
+              </PlayAudioBtn>
+
+              {/* Hidden YouTube Player */}
+              {isPlaying && (
+                <HiddenFrame
+                  src={`https://www.youtube.com/embed/${activeData[currentIndex].videoId}?autoplay=1&controls=0&disablekb=1&loop=1&playlist=${activeData[currentIndex].videoId}`}
+                  allow="autoplay"
+                  title="Audio Quiz"
+                />
+              )}
+            </div>
+          )}
+
           {/* TEXT QUESTION */}
-          {activeData[currentIndex].type !== 'image' && (
+          {activeData[currentIndex].type !== 'image' && activeData[currentIndex].type !== 'song' && (
             <QuestionText>
               {activeData[currentIndex].question}
             </QuestionText>
+          )}
+
+          {/* QUESTION TEXT FOR SONG/IMAGE */}
+          {(activeData[currentIndex].type === 'image' || activeData[currentIndex].type === 'song') && (
+            <MediaQuestionText>{activeData[currentIndex].question}</MediaQuestionText>
           )}
 
           {/* MULTIPLE CHOICE vs TEXT INPUT */}
