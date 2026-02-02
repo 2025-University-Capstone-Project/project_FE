@@ -16,33 +16,55 @@ const Container = styled.div`
 
 const LeftPanel = styled.div`
   flex: 1;
-  background: #eee;
+  background: white;
   padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-right: 20px;
 `;
 
 const RightPanel = styled.div`
   flex: 1;
-  background: #eee;
+  background: white;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 `;
 
 const Input = styled.input`
   font-size: 20px;
   padding: 10px;
   margin-bottom: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  &:focus {
+    border-color: ${({ theme }) => theme.primaryColor || "#333"};
+    outline: none;
+  }
 `;
 
 const Button = styled.button`
   font-size: 18px;
-  padding: 8px 16px;
+  padding: 10px 20px;
   margin: 5px;
   cursor: pointer;
+  background-color: ${({ theme, disabled }) => disabled ? "#ccc" : (theme.primaryColor || "#333")};
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: transform 0.1s;
+
+  &:hover {
+    transform: ${({ disabled }) => disabled ? "none" : "scale(1.05)"};
+    opacity: 0.9;
+  }
 `;
 
 const ScoreText = styled.h3`

@@ -7,9 +7,18 @@ const DiaryContainer = styled.div`
   margin-top: 20px;
 `;
 
+const PageTitle = styled.h2`
+  text-align: center;
+  font-size: 2rem;
+  color: ${({ theme }) => theme.primaryColor || "#333"};
+  margin-bottom: 30px;
+  font-weight: 800;
+`;
+
 const Diary = () => {
   return (
     <DiaryContainer>
+      <PageTitle>나의 직관일지</PageTitle>
       <Calendar />
     </DiaryContainer>
   );

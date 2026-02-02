@@ -9,10 +9,19 @@ const Grid = styled.div`
   justify-content: center;
 `;
 
+const Title = styled.h2`
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: ${({ theme }) => theme.primaryColor || "#333"};
+  margin-bottom: 40px;
+  margin-top: 20px;
+`;
+
 const GuideZone = () => {
   return (
     <div>
-      <h2 style={{ textAlign: "center" }}>가이드존</h2>
+      <Title>가이드존</Title>
       <Grid>
         {stadiums.map((s) => (
           <StadiumCard key={s.id} stadium={s} />
