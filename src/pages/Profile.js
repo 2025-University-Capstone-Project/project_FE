@@ -194,7 +194,7 @@ const Profile = () => {
                 )}
               </Avatar>
               <CameraBadge onClick={() => document.getElementById('profile-upload').click()}>
-                📷
+                📸
               </CameraBadge>
               <input
                 type="file"
