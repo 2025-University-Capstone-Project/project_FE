@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // Moved to top
 
 // --- Mock Data ---
 const personData = [
@@ -127,13 +128,25 @@ const PageTitle = styled.h1`
 `;
 
 // --- Hero Card (Wide Banner) ---
-const HeroCard = styled.div`
+
+const HeroRow = styled.div`
+  display: flex;
   width: 100%;
   max-width: 1000px;
-  height: 300px;
-  background: linear-gradient(135deg, ${({ theme }) => theme.primaryColor || "#9575cd"} 0%, ${({ theme }) => theme.secondaryColor || "#7e57c2"} 100%);
+  gap: 20px;
+  margin-bottom: 0px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const HeroCard = styled.div`
+  flex: 1;
+  height: 280px;
+  background: ${props => props.bg || `linear-gradient(135deg, ${({ theme }) => theme.primaryColor || "#9575cd"} 0%, ${({ theme }) => theme.secondaryColor || "#7e57c2"} 100%)`};
   border-radius: 24px;
-  padding: 40px;
+  padding: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -143,6 +156,8 @@ const HeroCard = styled.div`
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s;
+  
+  min-width: 300px;
 
   &:hover {
     transform: translateY(-5px);
@@ -155,7 +170,7 @@ const HeroContent = styled.div`
 `;
 
 const HeroTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: 900;
   margin-bottom: 10px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -412,6 +427,7 @@ const HeroTextMain = styled.span`
 `;
 
 const ExcitingZone = () => {
+  const navigate = useNavigate(); // Added hook
   const [gameMode, setGameMode] = useState(null); // 'person', 'song', 'rule'
   const [activeData, setActiveData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -496,21 +512,44 @@ const ExcitingZone = () => {
 
       {!gameMode ? (
         <>
-          {/* Main Hero Card */}
-          <HeroCard onClick={() => startGame('random')}>
-            <HeroContent>
-              <HeroTitle>종합 퀴즈</HeroTitle>
-              <HeroDesc>
-                야구 상식을 총동원하여<br />
-                모든 분야의 퀴즈에 도전하세요!
-              </HeroDesc>
-              <PlayPill>▶ Play</PlayPill>
-            </HeroContent>
-            <DecorBlock>🏆</DecorBlock>
-          </HeroCard>
+          <HeroRow>
+            {/* Comprehensive Quiz */}
+            <HeroCard
+              bg="linear-gradient(135deg, #f48fb1 0%, #d81b60 100%)"
+              onClick={() => startGame('random')}
+            >
+              <HeroContent>
+                <HeroTitle>종합 퀴즈</HeroTitle>
+                <HeroDesc>
+                  야구 상식을 총동원하여<br />
+                  모든 분야에 도전하세요!
+                </HeroDesc>
+                <PlayPill>▶ Play</PlayPill>
+              </HeroContent>
+              <DecorBlock>🏆</DecorBlock>
+            </HeroCard>
+
+            {/* Match Prediction - Moved Here */}
+            <HeroCard
+              bg="linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%)"
+              onClick={() => navigate('/prediction')}
+            >
+              <HeroContent>
+                <HeroTitle>승부 예측</HeroTitle>
+                <HeroDesc>
+                  오늘 경기 결과를 예측하고<br />
+                  포인트를 획득하세요!
+                </HeroDesc>
+                <PlayPill>🔮 예측하기</PlayPill>
+              </HeroContent>
+              <DecorBlock style={{ fontSize: '7rem', right: '30px' }}>🔮</DecorBlock>
+            </HeroCard>
+          </HeroRow>
 
           {/* Grid Cards */}
           <GridContainer>
+            {/* Removed Prediction Card from here */}
+
             <GameCard color="#64b5f6" onClick={() => startGame('person')}> {/* Light Blue */}
               <CardIcon>🧢</CardIcon>
               <div>

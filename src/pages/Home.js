@@ -104,6 +104,65 @@ const FeatureCard = styled(Link)`
   }
 `;
 
+const PredictionBanner = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #6b48ff 0%, #8e24aa 100%);
+  width: 80%;
+  margin: 50px auto 20px auto;
+  padding: 30px 50px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: white;
+  box-shadow: 0 10px 30px rgba(107, 72, 255, 0.3);
+  transition: transform 0.3s;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(107, 72, 255, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 30px;
+  }
+`;
+
+const BannerContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+`;
+
+const BannerTitle = styled.h2`
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+`;
+
+const BannerText = styled.p`
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+`;
+
+const BannerButton = styled.div`
+  background: white;
+  color: #6b48ff;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  z-index: 2;
+`;
+
 const Home = () => {
   const [isSelectorVisible, setSelectorVisible] = useState(false);
   const [myTeam, setMyTeam] = useState(null);
@@ -144,6 +203,14 @@ const Home = () => {
           )}
         </TeamBadge>
       </HeroSection>
+
+      <PredictionBanner to="/prediction">
+        <BannerContent>
+          <BannerTitle>🔮 오늘의 승부 예측</BannerTitle>
+          <BannerText>오늘 경기의 승패를 예측하고 포인트를 획득하세요!</BannerText>
+        </BannerContent>
+        <BannerButton>참여하기 &gt;</BannerButton>
+      </PredictionBanner>
 
       <FeaturesGrid>
         <FeatureCard to="/diary">

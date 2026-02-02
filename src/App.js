@@ -14,6 +14,7 @@ import GuideZone from './pages/GuideZone';
 import StadiumDetail from "./components/StadiumDetail";
 import ReviewWrite from './pages/ReviewWrite';
 import ReviewView from './pages/ReviewView';
+import MatchPrediction from "./pages/MatchPrediction";
 import Profile from './pages/Profile';
 import teamThemes from "./theme/teams"; // 테마 정의 임포트
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="review/write" element={<ReviewWrite />} />
             <Route path="review/view" element={<ReviewView />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/prediction" element={<MatchPrediction />} /> {/* Added route */}
           </Route>
         </Routes>
       </Router>
