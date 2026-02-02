@@ -95,6 +95,42 @@ const Icons = {
       <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
       <path d="M12 18V6" />
     </svg>
+  ),
+  RetroCamera: () => (
+    <svg width="28" height="28" viewBox="0 0 100 100" style={{ transform: 'rotate(-5deg)' }}>
+      {/* Top Prism Area */}
+      <path d="M30 35 L40 15 H60 L70 35 Z" fill="white" stroke="#2c3e50" strokeWidth="6" strokeLinejoin="round" />
+      <rect x="42" y="20" width="16" height="8" fill="#4EB0C0" />
+
+      {/* Main Body */}
+      <rect x="5" y="35" width="90" height="55" rx="12" fill="white" stroke="#2c3e50" strokeWidth="6" />
+
+      {/* Color Accents */}
+      <path d="M5 45 L5 80 Q5 90 15 90 H50 V35 H15 Q5 35 5 45" fill="#4EB0C0" />
+      <path d="M50 35 H85 Q95 35 95 45 V80 Q95 90 85 90 H50 Z" fill="#F26D6D" />
+
+      {/* Horizontal Divider Line */}
+      <rect x="5" y="52" width="90" height="4" fill="#2c3e50" />
+
+      {/* Bottom Accent */}
+      <rect x="15" y="82" width="70" height="8" rx="4" fill="#F5B041" />
+
+      {/* Small Top Details */}
+      <rect x="15" y="26" width="12" height="9" fill="#2c3e50" rx="2" />
+      <rect x="73" y="26" width="12" height="9" fill="#2c3e50" rx="2" />
+
+      {/* Central Lens Shell */}
+      <circle cx="50" cy="62" r="32" fill="white" stroke="#2c3e50" strokeWidth="6" />
+      {/* Lens Inner Ring */}
+      <circle cx="50" cy="62" r="26" fill="none" stroke="#F5B041" strokeWidth="4" />
+      {/* Lens Glass */}
+      <circle cx="50" cy="62" r="20" fill="#2c3e50" />
+      {/* Reflection */}
+      <circle cx="43" cy="55" r="7" fill="white" opacity="0.3" />
+
+      {/* Small Feature Light */}
+      <circle cx="82" cy="44" r="6" fill="#4EB0C0" stroke="#2c3e50" strokeWidth="4" />
+    </svg>
   )
 };
 
@@ -194,7 +230,7 @@ const Profile = () => {
                 )}
               </Avatar>
               <CameraBadge onClick={() => document.getElementById('profile-upload').click()}>
-                📸
+                <Icons.RetroCamera />
               </CameraBadge>
               <input
                 type="file"
