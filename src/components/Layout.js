@@ -1,3 +1,4 @@
+import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import {
@@ -91,6 +92,23 @@ const Baseball = () => (
 
 const Layout = () => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(!!localStorage.getItem("loggedInUser"));
+
+  // Listen for auth changes
+  React.useEffect(() => {
+    const checkAuth = () => setIsLoggedIn(!!localStorage.getItem("loggedInUser"));
+    window.addEventListener("auth-change", checkAuth);
+    // double check on mount
+    checkAuth();
+    return () => window.removeEventListener("auth-change", checkAuth);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    window.dispatchEvent(new Event("auth-change"));
+    alert("로그아웃 되었습니다.");
+    navigate("/");
+  };
 
   return (
     <Container>
@@ -103,9 +121,13 @@ const Layout = () => {
           <SiteTitle>Y.P.T</SiteTitle>
         </LogoContainer>
 
-        <Link to="/login">
-          <LoginButton>로그인</LoginButton>
-        </Link>
+        {isLoggedIn ? (
+          <LoginButton onClick={handleLogout}>로그아웃</LoginButton>
+        ) : (
+          <Link to="/login">
+            <LoginButton>로그인</LoginButton>
+          </Link>
+        )}
       </Header>
 
       {/* 메뉴바 */}

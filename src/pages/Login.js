@@ -25,12 +25,33 @@ const Login = () => {
 
       if (response && response.data) {
         alert("로그인 성공!");
+        // 지금은 응답 데이터를 그대로 저장
         localStorage.setItem("loggedInUser", JSON.stringify(response.data));
+        window.dispatchEvent(new Event("auth-change"));
+
+        // 홈으로 이동
         navigate("/");
       }
     } catch (error) {
-      console.error("Login failed:", error);
-      alert("아이디 또는 비밀번호가 틀렸습니다.");
+      console.warn("Server login failed, trying mock login...", error);
+
+      // --- Fallback: Mock Login (Local Storage) ---
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const mockUser = users.find(u => u.id === form.id && u.password === form.password);
+
+      if (mockUser) {
+        alert("로그인 성공! (테스트 모드)");
+        // Create a mock token/user object
+        const mockUserData = { ...mockUser, token: "mock-token-12345", nickname: mockUser.id };
+        localStorage.setItem("loggedInUser", JSON.stringify(mockUserData));
+        window.dispatchEvent(new Event("auth-change"));
+        navigate("/");
+        return;
+      }
+
+      // If both fail:
+      const errorMessage = error.response?.data?.message || "아이디 또는 비밀번호가 틀렸습니다.";
+      alert(errorMessage);
     }
   };
 
