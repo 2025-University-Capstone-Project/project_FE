@@ -206,7 +206,7 @@ const Home = () => {
 
       <PredictionBanner to="/prediction">
         <BannerContent>
-          <BannerTitle>🔮 오늘의 승부 예측</BannerTitle>
+          <BannerTitle>🏆 오늘의 승부 예측</BannerTitle>
           <BannerText>오늘 경기의 승패를 예측하고 포인트를 획득하세요!</BannerText>
         </BannerContent>
         <BannerButton>참여하기 &gt;</BannerButton>
