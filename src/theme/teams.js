@@ -52,9 +52,9 @@ const teamThemes = {
         textColor: "#FFFFFF"
     },
     default: {
-        primaryColor: "#FFFFFF", // White main
+        primaryColor: "#333333", // Dark Grey for visibility
         secondaryColor: "#FFD700", // Yellow accent
-        gradient: "linear-gradient(135deg, #FFFFFF 0%, #F0E68C 50%, #98FB98 100%)", // White -> Khaki (Yellowish) -> PaleGreen
+        gradient: "linear-gradient(135deg, #FFFFFF 0%, #F0E68C 50%, #98FB98 100%)", // White -> Khaki -> PaleGreen
         textColor: "#333333" // Dark text for light background
     },
 };
