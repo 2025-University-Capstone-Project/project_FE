@@ -289,7 +289,7 @@ const Calendar = () => {
           ))}
         </MonthList>
         <ListLinkBtn onClick={() => navigate('/diary/list')}>
-          📖 일지 모아보기
+          일지 모아보기
         </ListLinkBtn>
       </Sidebar>
       <MainContent>

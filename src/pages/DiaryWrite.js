@@ -253,6 +253,25 @@ const DiaryWrite = () => {
     const [isWeatherOpen, setIsWeatherOpen] = useState(false);
     const [isMoodOpen, setIsMoodOpen] = useState(false);
 
+    const weatherRef = React.useRef(null);
+    const moodRef = React.useRef(null);
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (weatherRef.current && !weatherRef.current.contains(event.target)) {
+                setIsWeatherOpen(false);
+            }
+            if (moodRef.current && !moodRef.current.contains(event.target)) {
+                setIsMoodOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     useEffect(() => {
         const savedEntries = JSON.parse(localStorage.getItem('diaryEntries')) || {};
         if (savedEntries[date]) {
@@ -266,6 +285,17 @@ const DiaryWrite = () => {
             setEntry(loaded);
         }
     }, [date]);
+
+    // Toggling logic with mutual exclusion
+    const toggleWeather = () => {
+        if (!isWeatherOpen) setIsMoodOpen(false); // Close mood if opening weather
+        setIsWeatherOpen(!isWeatherOpen);
+    };
+
+    const toggleMood = () => {
+        if (!isMoodOpen) setIsWeatherOpen(false); // Close weather if opening mood
+        setIsMoodOpen(!isMoodOpen);
+    };
 
     const handleSave = () => {
         const savedEntries = JSON.parse(localStorage.getItem('diaryEntries')) || {};
@@ -335,8 +365,8 @@ const DiaryWrite = () => {
                 {/* Dropdowns Row */}
                 <DropdownRow>
                     {/* Weather Dropdown */}
-                    <DropdownContainer>
-                        <DropdownHeader onClick={() => setIsWeatherOpen(!isWeatherOpen)}>
+                    <DropdownContainer ref={weatherRef}>
+                        <DropdownHeader onClick={toggleWeather}>
                             <div className="value">
                                 <span style={{ marginRight: '8px', color: '#555' }}>{weatherTranslations[entry.weather] || entry.weather}</span>
                                 <div style={{ width: '24px', height: '24px' }}><SelectedWeatherIcon /></div>
@@ -360,8 +390,8 @@ const DiaryWrite = () => {
                     </DropdownContainer>
 
                     {/* Mood Dropdown */}
-                    <DropdownContainer>
-                        <DropdownHeader onClick={() => setIsMoodOpen(!isMoodOpen)}>
+                    <DropdownContainer ref={moodRef}>
+                        <DropdownHeader onClick={toggleMood}>
                             <div className="value">
                                 <span style={{ marginRight: '8px', color: '#555' }}>{selectedMoodObj.label}</span>
                                 <div style={{ width: '24px', height: '24px' }}>{selectedMoodObj.component()}</div>
@@ -503,7 +533,7 @@ const DropdownHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ccc;
+    /* border-bottom: 1px solid #ccc; removed */
     padding: 10px 0;
     cursor: pointer;
     
